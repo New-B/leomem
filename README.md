@@ -1,2 +1,4 @@
 # leomem
 A RDMA-backed Distributed Shared Memory System.
+
+The LeoMem repository is organized in a modular way to separate core runtime components from evaluation and documentation. The src/ directory contains the main system implementation, including the runtime, RDMA communication, local and distributed memory management, metadata management, profiling, cache management, and coherence protocols. Public interfaces and shared type definitions are placed in include/, while configs/ stores cluster, workload, and ablation settings. The tests/ directory provides unit, integration, and correctness tests, and benchmarks/ includes both microbenchmarks and application-level workloads for evaluation. Supporting scripts for building, deployment, and experiment execution are placed in scripts/, detailed design documents are maintained in docs/, and auxiliary tools for result parsing, tracing, and plotting are collected in tools/.
