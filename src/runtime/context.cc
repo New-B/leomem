@@ -19,6 +19,8 @@ Status RuntimeContext::Init(const Config& cfg) {
     if (initialized_) return Status::kAlreadyInitialized;
 
     config_ = cfg;
+    next_control_request_id_ = 1;
+    pending_control_acks_.clear();
 
     stats_ = std::make_unique<StatsCollector>();
     allocator_ = std::make_unique<DsmAllocator>(config_);
@@ -34,6 +36,15 @@ Status RuntimeContext::Init(const Config& cfg) {
 
     s = transport_->Init();
     if (s != Status::kOk) return s;
+
+    auto caps = transport_->GetCapabilities();
+    if (caps.supports_one_sided_read || caps.supports_one_sided_write) {
+        RdmaMemoryRegion region;
+        s = transport_->RegisterMemoryRegion(allocator_->LocalBase(),
+                                             allocator_->LocalRegionSize(),
+                                             &region);
+        if (s != Status::kOk) return s;
+    }
 
     initialized_ = true;
     LM_LOG_INFO("LeoMem runtime initialized: node_id=%u nr_nodes=%u block_size=%zu",
@@ -54,6 +65,8 @@ Status RuntimeContext::Shutdown() {
     allocator_.reset();
     block_table_.reset();
     stats_.reset();
+    next_control_request_id_ = 1;
+    pending_control_acks_.clear();
 
     initialized_ = false;
     return Status::kOk;
@@ -72,5 +85,32 @@ DsmAllocator* RuntimeContext::allocator() { return allocator_.get(); }
 CacheManager* RuntimeContext::cache_manager() { return cache_manager_.get(); }
 BlockTable* RuntimeContext::block_table() { return block_table_.get(); }
 StatsCollector* RuntimeContext::stats() { return stats_.get(); }
+
+std::uint64_t RuntimeContext::NextControlRequestId() {
+    std::lock_guard<std::mutex> lk(mu_);
+    return next_control_request_id_++;
+}
+
+void RuntimeContext::TrackPendingControlAck(std::uint64_t request_id) {
+    if (request_id == 0) return;
+    std::lock_guard<std::mutex> lk(mu_);
+    pending_control_acks_.insert(request_id);
+}
+
+void RuntimeContext::CompleteControlAck(std::uint64_t request_id) {
+    if (request_id == 0) return;
+    std::lock_guard<std::mutex> lk(mu_);
+    pending_control_acks_.erase(request_id);
+}
+
+bool RuntimeContext::HasPendingControlAck(std::uint64_t request_id) {
+    std::lock_guard<std::mutex> lk(mu_);
+    return pending_control_acks_.find(request_id) != pending_control_acks_.end();
+}
+
+std::size_t RuntimeContext::PendingControlAcks() const {
+    std::lock_guard<std::mutex> lk(mu_);
+    return pending_control_acks_.size();
+}
 
 }  // namespace leomem

@@ -1,0 +1,2 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libleomem_memory.a CMakeFiles/leomem_memory.dir/global/dsm_allocator.cc.o CMakeFiles/leomem_memory.dir/cache/cache_manager.cc.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib libleomem_memory.a

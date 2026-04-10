@@ -1,0 +1,21 @@
+Start testing: Apr 10 18:00 CST
+----------------------------------------------------------
+1/1 Testing: leomem_test_smoke
+1/1 Test: leomem_test_smoke
+Command: "/Users/wangbo/Documents/submission/vldb2026/leomem/build/tests/leomem_test_smoke"
+Directory: /Users/wangbo/Documents/submission/vldb2026/leomem/build/tests
+"leomem_test_smoke" start time: Apr 10 18:00 CST
+Output:
+----------------------------------------------------------
+[18:00:15][INFO][/Users/wangbo/Documents/submission/vldb2026/leomem/src/transport/transport_stub.cc:33] Using stub transport
+[18:00:15][INFO][/Users/wangbo/Documents/submission/vldb2026/leomem/src/runtime/context.cc:49] LeoMem runtime initialized: node_id=0 nr_nodes=1 block_size=4096
+smoke test passed
+<end of output>
+Test time =   0.72 sec
+----------------------------------------------------------
+Test Passed.
+"leomem_test_smoke" end time: Apr 10 18:00 CST
+"leomem_test_smoke" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Apr 10 18:00 CST

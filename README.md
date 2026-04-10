@@ -1,4 +1,455 @@
-# leomem
-A RDMA-backed Distributed Shared Memory System.
+# LeoMem
 
-The LeoMem repository is organized in a modular way to separate core runtime components from evaluation and documentation. The src/ directory contains the main system implementation, including the runtime, RDMA communication, local and distributed memory management, metadata management, profiling, cache management, and coherence protocols. Public interfaces and shared type definitions are placed in include/, while configs/ stores cluster, workload, and ablation settings. The tests/ directory provides unit, integration, and correctness tests, and benchmarks/ includes both microbenchmarks and application-level workloads for evaluation. Supporting scripts for building, deployment, and experiment execution are placed in scripts/, detailed design documents are maintained in docs/, and auxiliary tools for result parsing, tracing, and plotting are collected in tools/.
+LeoMem is an RDMA-oriented Distributed Shared Memory (DSM) prototype that focuses on the data plane rather than redefining the DSM abstraction itself. The implementation in this repository is organized around the three core ideas discussed in the LeoMem design:
+
+- `profiling-driven cache admission`: do not cache every remote miss; cache only blocks that look worth keeping.
+- `destination-aware remote write batching`: queue and merge remote writes by destination node before flushing them.
+- `adaptive coherence`: switch coherence behavior according to observed sharing and read/write phase shifts.
+
+The current codebase already contains a runnable end-to-end prototype with:
+
+- a public DSM API (`lm_init`, `lm_malloc`, `lm_read`, `lm_write`, `lm_fence`)
+- block-aware metadata and profiling
+- local cache admission and invalidation logic
+- owner-biased adaptive write handling
+- explicit control messages for invalidation and owner transfer, including ack tracking
+- a stub transport for functional evaluation
+- an RDMA transport implementation skeleton with verbs-based bring-up code paths
+- microbenchmarks, a workload-style benchmark, tests, and experiment scripts
+
+This README explains the repository layout, how to build the system, how to run tests and benchmarks, and how to use the provided baseline/ablation configs.
+
+## What LeoMem Tries To Optimize
+
+Traditional RDMA-based DSM systems often pay more overhead in data migration and coherence traffic than in the raw latency of a single remote access. LeoMem targets three recurring pain points:
+
+- overly aggressive `cache-on-miss`, which brings data local even when it has weak locality
+- frequent owner migration under dynamic write sharing
+- amplified invalidation traffic when sharing patterns shift
+
+In this implementation, those concerns map to concrete mechanisms:
+
+- `BlockMeta` tracks per-block profiling signals such as access counts, read/write windows, sharer count, invalidation cost, and owner state.
+- `CacheManager` decides whether a remote block should be cached, when pending writes should be merged and flushed, and how invalidation should behave under different coherence modes.
+- `Transport` provides one-sided read/write, batched write, and control-message interfaces so the data plane can sit above either the stub path or the RDMA path.
+
+## Repository Layout
+
+The main directories are:
+
+- [`include/leomem`](/Users/wangbo/Documents/submission/vldb2026/leomem/include/leomem): public API, config, address, status, and stats headers
+- [`src/api`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/api): exported DSM API implementation (`lm_read`, `lm_write`, `lm_fence`, allocation APIs)
+- [`src/runtime`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/runtime): runtime bootstrap, config loading, global context wiring
+- [`src/memory/global`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/memory/global): DSM allocator and local region management
+- [`src/memory/cache`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/memory/cache): profiling-driven cache admission, shadow cache, write batching, invalidation helpers
+- [`src/metadata`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/metadata): block metadata structures and lookup table
+- [`src/transport`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/transport): stub transport and RDMA transport implementation
+- [`src/stats`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/stats): counters and exported stats snapshot
+- [`benchmarks/micro`](/Users/wangbo/Documents/submission/vldb2026/leomem/benchmarks/micro): small focused benchmarks for protocol and data-plane behavior
+- [`benchmarks/workload`](/Users/wangbo/Documents/submission/vldb2026/leomem/benchmarks/workload): workload-style benchmark drivers
+- [`tests/unit`](/Users/wangbo/Documents/submission/vldb2026/leomem/tests/unit): unit/smoke tests
+- [`configs`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs): runnable configurations for LeoMem, baselines, ablations, and RDMA bring-up
+- [`scripts`](/Users/wangbo/Documents/submission/vldb2026/leomem/scripts): experiment automation and result collection helpers
+- [`results`](/Users/wangbo/Documents/submission/vldb2026/leomem/results): example outputs generated by the bundled experiment script
+
+## High-Level Architecture
+
+At a high level, the runtime looks like this:
+
+```text
+Application
+  -> lm_read / lm_write / lm_fence
+  -> RuntimeContext
+      -> DsmAllocator
+      -> BlockTable / BlockMeta
+      -> CacheManager
+      -> Transport (stub or RDMA)
+      -> StatsCollector
+```
+
+The most relevant source files for readers are:
+
+- [`include/leomem/leomem.h`](/Users/wangbo/Documents/submission/vldb2026/leomem/include/leomem/leomem.h): public API surface
+- [`src/api/access_api.cc`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/api/access_api.cc): read/write fast path, owner-aware remote read, control messages
+- [`src/api/sync_api.cc`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/api/sync_api.cc): batched flush and control-message draining
+- [`src/memory/cache/cache_manager.cc`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/memory/cache/cache_manager.cc): admission, coherence mode decision, write merging
+- [`src/metadata/block_meta.h`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/metadata/block_meta.h): per-block metadata schema
+- [`src/transport/transport.h`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/transport/transport.h): transport abstraction
+- [`src/transport/transport_stub.cc`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/transport/transport_stub.cc): local functional transport
+- [`src/transport/rdma_transport.cc`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/transport/rdma_transport.cc): verbs-based RDMA transport path
+
+## Build Requirements
+
+### Common Requirements
+
+- CMake `>= 3.16`
+- a C++17 compiler
+- POSIX shell environment
+
+On macOS or Linux, the default build flow is:
+
+```bash
+cmake -S . -B build
+cmake --build build
+```
+
+The repository also provides a small `Makefile` wrapper:
+
+```bash
+make debug
+make test
+```
+
+### Optional RDMA Requirements
+
+To compile the RDMA transport path, you also need:
+
+- `libibverbs`
+- RDMA headers, including `infiniband/verbs.h`
+
+Build with RDMA enabled:
+
+```bash
+cmake -S . -B build -DLEOMEM_ENABLE_RDMA=ON -DCMAKE_BUILD_TYPE=Debug
+cmake --build build
+```
+
+If `LEOMEM_ENABLE_RDMA=ON` is set but `libibverbs` is not found, configuration will fail intentionally.
+
+## Build Modes
+
+Useful CMake options:
+
+- `-DLEOMEM_BUILD_TESTS=ON|OFF`
+- `-DLEOMEM_BUILD_BENCHMARKS=ON|OFF`
+- `-DLEOMEM_ENABLE_RDMA=ON|OFF`
+- `-DLEOMEM_ENABLE_ASAN=ON|OFF`
+
+Example release build:
+
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+```
+
+## Running Tests
+
+The repository currently includes a smoke/unit test in [`tests/unit/test_smoke.cc`](/Users/wangbo/Documents/submission/vldb2026/leomem/tests/unit/test_smoke.cc).
+
+Build and run:
+
+```bash
+make debug
+make test
+```
+
+Or directly with CTest:
+
+```bash
+cmake -S . -B build
+cmake --build build
+ctest --test-dir build --output-on-failure
+```
+
+The smoke test covers:
+
+- local allocation and local read/write correctness
+- block metadata creation across single-block and multi-block ranges
+- profiling-based cache decisions
+- invalidation and invalidation-range behavior
+- write batching and merge behavior
+- owner-aware remote read handling
+- control-message ack bookkeeping
+
+## Configuration Files
+
+LeoMem reads a simple `key=value` config file during `lm_init`.
+
+Representative config fields include:
+
+- `node_id`, `nr_nodes`
+- `block_size`, `local_region_size`
+- `enable_rdma`
+- `enable_cache`
+- `enable_write_batching`
+- `rdma_enable_control_path`
+- `cache_admission_policy`
+- `coherence_mode_override`
+- profiling and coherence thresholds
+- RDMA bring-up parameters such as `rdma_device_name`, `rdma_port`, `rdma_gid_index`, and `rdma_exchange_dir`
+
+Notable bundled configs:
+
+- [`configs/leomem_full_2node.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/leomem_full_2node.conf): full LeoMem policy on the stub transport for 2 nodes
+- [`configs/leomem_full_4node.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/leomem_full_4node.conf): full LeoMem policy on the stub transport
+- [`configs/leomem_full_6node.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/leomem_full_6node.conf): full LeoMem policy on the stub transport for 6 nodes
+- [`configs/leomem_full_8node.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/leomem_full_8node.conf): full LeoMem policy on the stub transport for 8 nodes
+- [`configs/leomem_full_16node.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/leomem_full_16node.conf): full LeoMem policy on the stub transport for 16 nodes
+- [`configs/baseline_always_cache.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/baseline_always_cache.conf): always admit cache, adaptive mode fixed
+- [`configs/baseline_fixed_si.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/baseline_fixed_si.conf): fixed shared-invalidate style baseline
+- [`configs/baseline_fixed_wi.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/baseline_fixed_wi.conf): fixed write-invalidate style baseline
+- [`configs/ablation_no_batching.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/ablation_no_batching.conf): LeoMem-style control logic with batching disabled
+- [`configs/stub_4node_node0.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/stub_4node_node0.conf): simple multi-node stub setup
+- [`configs/rdma_2node_node0.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/rdma_2node_node0.conf) and [`configs/rdma_2node_node1.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/rdma_2node_node1.conf): two-node RDMA sample configs
+
+### Baseline/Ablation Switches
+
+Two config knobs are especially useful for experiments:
+
+- `cache_admission_policy`
+  - `profiled`: use profiling-driven admission
+  - `always`: cache every eligible miss
+  - `never`: disable admission
+- `coherence_mode_override`
+  - `-1`: use adaptive coherence selection
+  - `wi`: force `WI`
+  - `si`: force `SI`
+  - `adaptive`: force `Adaptive`
+
+### Configuration Quick Reference
+
+The table below lists the most important knobs for everyday use. The "recommended value" column reflects the current bundled LeoMem-style configs such as [`configs/leomem_full_4node.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/leomem_full_4node.conf).
+
+| Parameter | Meaning | Recommended value | Affects |
+| --- | --- | --- | --- |
+| `node_id` | Logical node identifier of the current process | `0..nr_nodes-1` | Runtime identity, transport, metadata ownership |
+| `nr_nodes` | Total logical node count in the experiment | `2`, `4`, `6`, `8`, or `16` | Benchmark target generation, transport peer setup, metadata sharing scope |
+| `block_size` | DSM coherence and profiling granularity | `4096` | Allocator block mapping, metadata lookup, cache/invalidation range logic |
+| `local_region_size` | Bytes reserved for the local DSM region | `67108864` | Allocator capacity, local memory registration, transport bounds checking |
+| `enable_rdma` | Select RDMA transport instead of stub transport | `0` for local runs, `1` for RDMA deployment | Transport backend and bring-up path |
+| `enable_cache` | Turn remote shadow caching on or off | `1` | Cache admission, read hit path, invalidation behavior |
+| `enable_write_batching` | Enable destination-aware remote write queueing | `1` | Write data path, flush behavior, batching statistics |
+| `rdma_enable_control_path` | Enable explicit invalidate/owner-transfer control messages | `1` | Coherence control path and ack handling |
+| `cache_admission_policy` | Admission mode selector: `profiled`, `always`, `never` | `profiled` | CacheManager admission policy and baseline selection |
+| `coherence_mode_override` | Force a fixed coherence mode or allow adaptive selection | `-1` | Coherence mode decision in `CacheManager` |
+| `profiling_window_size` | Number of accesses per profiling window | `8` | Reuse tracking, phase-change detection, admission and coherence switching |
+| `cache_admission_min_reads` | Minimum reads before a block is considered cache-worthy | `2` | Cache admission aggressiveness |
+| `cache_admission_max_writes` | Maximum write count allowed for admission | `1` | Cache admission conservativeness on write-shared data |
+| `cache_admission_max_sharers` | Maximum sharer count tolerated by admission | `2` | Cache admission under growing sharing degree |
+| `cache_admission_max_reuse_distance` | Largest reuse distance still considered cache-friendly | `4` | Cache locality sensitivity |
+| `cache_admission_min_read_ratio` | Minimum read fraction within the profiling window | `0.60` | Cache admission preference for read-dominant blocks |
+| `cache_admission_max_phase_change_ratio` | Maximum tolerated access-type switching frequency | `0.35` | Cache admission stability threshold |
+| `remote_write_batch_threshold` | Default queue depth before flushing SI traffic | `2` | Write batching aggressiveness in non-WI phases |
+| `adaptive_mode_batch_threshold` | Queue depth before flushing Adaptive traffic | `1` | Write batching in adaptive owner-biased phases |
+| `coherence_sharer_promote_threshold` | Sharer count that pushes a block toward Adaptive mode | `2` | Adaptive coherence switching |
+| `coherence_invalidation_promote_threshold` | Invalidation-cost threshold that pushes toward Adaptive mode | `2` | Adaptive coherence switching |
+| `coherence_write_dominant_ratio` | Write fraction that forces a block toward WI mode | `0.55` | Coherence mode decision under write-heavy phases |
+| `coherence_phase_change_promote_ratio` | Phase-change ratio that forces a block toward WI mode | `0.30` | Coherence mode decision under unstable sharing |
+| `rdma_device_name` | RDMA NIC device name | machine-specific | RDMA transport initialization |
+| `rdma_port` | RDMA port index on the selected NIC | `1` | RDMA bring-up |
+| `rdma_gid_index` | GID index used for addressing | `0` | RDMA address resolution |
+| `rdma_exchange_dir` | Shared directory used for peer/control exchange files | deployment-specific | RDMA bootstrap and control mailbox |
+| `rdma_cq_depth` | Completion queue depth | `1024` | RDMA completion capacity |
+| `rdma_sq_depth` | Send queue depth | `1024` | RDMA post-send capacity |
+| `rdma_rq_depth` | Receive queue depth | `1024` | RDMA queue-pair provisioning |
+| `rdma_bootstrap_timeout_ms` | Wait time for peer exchange files | `30000` | RDMA bring-up robustness |
+
+Practical tuning suggestions:
+
+- Start with one of the bundled `leomem_full_*node.conf` files and only change `nr_nodes` and `node_id` first.
+- For cache-admission ablations, change `cache_admission_policy` before changing the lower-level thresholds.
+- For coherence ablations, use `coherence_mode_override` before tuning the adaptive thresholds.
+- For batching studies, compare `enable_write_batching=0` against changes to `remote_write_batch_threshold` and `adaptive_mode_batch_threshold`.
+- For RDMA bring-up, keep policy parameters fixed and only tune the `rdma_*` fields until transport initialization is stable.
+
+## Running Microbenchmarks
+
+The microbenchmark binaries are:
+
+- [`build/benchmarks/leomem_micro_rw_latency`](/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/leomem_micro_rw_latency)
+- [`build/benchmarks/leomem_micro_phase_shift`](/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/leomem_micro_phase_shift)
+- [`build/benchmarks/leomem_micro_runtime_phase_shift`](/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/leomem_micro_runtime_phase_shift)
+
+Build first:
+
+```bash
+cmake -S . -B build
+cmake --build build
+```
+
+Then run:
+
+```bash
+./build/benchmarks/leomem_micro_rw_latency
+./build/benchmarks/leomem_micro_phase_shift
+./build/benchmarks/leomem_micro_runtime_phase_shift configs/leomem_full_4node.conf
+```
+
+What each benchmark does:
+
+- `leomem_micro_rw_latency`: simple read/write API latency path
+- `leomem_micro_phase_shift`: protocol-focused internal benchmark for coherence mode transitions and write batching behavior
+- `leomem_micro_runtime_phase_shift`: runtime-driven phase-shift workload using the public API and config files
+
+Example output from `leomem_micro_runtime_phase_shift` includes:
+
+- read/write operation counts
+- cache hits, misses, admissions, and rejections
+- coherence mode switch counts
+- invalidation statistics
+- owner-biased and handoff counts
+- write batching totals
+
+## Running The Workload Benchmark
+
+The repository also includes a workload-style benchmark:
+
+- [`build/benchmarks/leomem_workload_iterative_analytics`](/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/leomem_workload_iterative_analytics)
+
+Run it with the full LeoMem config:
+
+```bash
+./build/benchmarks/leomem_workload_iterative_analytics configs/leomem_full_4node.conf
+```
+
+This benchmark emulates an iterative analytics pattern with repeated read phases, update phases, and synchronization points. It is useful as a lightweight stand-in for graph-style or iterative data analytics workloads where sharing patterns evolve over time.
+
+Its output ends with a `csv:` line so the result can be collected automatically by experiment scripts.
+
+## Running A 4-Node Setup
+
+For readers who want one concrete setup to follow, the easiest path is the bundled 4-node stub configuration in [`configs/leomem_full_4node.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/leomem_full_4node.conf).
+
+1. Build the project:
+
+```bash
+cmake -S . -B build
+cmake --build build
+```
+
+2. Run the smoke test:
+
+```bash
+ctest --test-dir build --output-on-failure
+```
+
+3. Run the runtime phase-shift microbenchmark at 4-node scale:
+
+```bash
+./build/benchmarks/leomem_micro_runtime_phase_shift configs/leomem_full_4node.conf
+```
+
+4. Run the workload benchmark at 4-node scale:
+
+```bash
+./build/benchmarks/leomem_workload_iterative_analytics configs/leomem_full_4node.conf
+```
+
+5. Run the bundled comparison matrix:
+
+```bash
+./scripts/run_ablation_matrix.sh
+```
+
+If you want to change only the logical scale of the stub evaluation, replace `configs/leomem_full_4node.conf` with one of:
+
+- `configs/leomem_full_2node.conf`
+- `configs/leomem_full_6node.conf`
+- `configs/leomem_full_8node.conf`
+- `configs/leomem_full_16node.conf`
+
+## Running Baseline And Ablation Experiments
+
+The simplest way to run the provided comparison matrix is:
+
+```bash
+./scripts/run_ablation_matrix.sh
+```
+
+This script will:
+
+1. configure and build the project
+2. run the workload benchmark on a set of bundled configs
+3. store raw outputs in [`results`](/Users/wangbo/Documents/submission/vldb2026/leomem/results)
+4. aggregate the `csv:` lines into [`results/summary.csv`](/Users/wangbo/Documents/submission/vldb2026/leomem/results/summary.csv)
+
+If you only want to re-aggregate existing outputs, run:
+
+```bash
+python3 ./scripts/collect_results.py results
+```
+
+## Deploying The RDMA Path
+
+The codebase contains an RDMA transport implementation in [`src/transport/rdma_transport.cc`](/Users/wangbo/Documents/submission/vldb2026/leomem/src/transport/rdma_transport.cc). It currently includes:
+
+- device/context/PD/CQ/QP initialization
+- local memory registration
+- file-based endpoint exchange
+- queue-pair transitions `INIT -> RTR -> RTS`
+- one-sided `READ`, `WRITE`, `BatchWrite`, and completion polling
+- a file-based control-message mailbox
+
+To prepare a two-node deployment:
+
+1. Build with RDMA enabled.
+2. Copy the repository to both nodes.
+3. Edit [`configs/rdma_2node_node0.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/rdma_2node_node0.conf) and [`configs/rdma_2node_node1.conf`](/Users/wangbo/Documents/submission/vldb2026/leomem/configs/rdma_2node_node1.conf) so they use:
+   - the correct `rdma_device_name`
+   - the correct `rdma_port`
+   - a shared or otherwise coordinated `rdma_exchange_dir`
+4. Start the corresponding binaries on both nodes so each node can write its exchange file and observe its peer's file.
+
+Example build:
+
+```bash
+cmake -S . -B build -DLEOMEM_ENABLE_RDMA=ON -DCMAKE_BUILD_TYPE=Debug
+cmake --build build
+```
+
+Important note: the RDMA code path is implemented in source form, but this repository does not include orchestration code for a full production deployment. You should treat the current RDMA path as a research-system implementation path intended for system experimentation and further tuning.
+
+## Public API Summary
+
+The public API is defined in [`include/leomem/leomem.h`](/Users/wangbo/Documents/submission/vldb2026/leomem/include/leomem/leomem.h):
+
+```cpp
+Status lm_init(const char* config_path = nullptr);
+Status lm_shutdown();
+
+GlobalAddr lm_malloc(std::size_t size);
+Status lm_free(GlobalAddr addr);
+
+Status lm_read(GlobalAddr addr, void* buf, std::size_t size);
+Status lm_write(GlobalAddr addr, const void* buf, std::size_t size);
+
+Status lm_fence();
+Status lm_barrier();
+
+StatsSnapshot lm_get_stats();
+```
+
+The exported stats structure lives in [`include/leomem/stats.h`](/Users/wangbo/Documents/submission/vldb2026/leomem/include/leomem/stats.h) and includes:
+
+- operation counters
+- local vs. remote access counters
+- cache hit/miss and admission counters
+- batching counters
+- coherence mode counters
+- invalidation counters
+- owner-biased and handoff counters
+
+## Current Scope And Limitations
+
+This repository is already runnable and useful for design exploration, but it is still a research prototype. A few boundaries are worth stating explicitly:
+
+- the stub transport is the most practical way to run the full software stack locally
+- the workload benchmark is synthetic rather than a full PageRank or K-means application
+- the system focuses on the data plane and protocol structure, not on a polished production deployment stack
+
+## Typical Local Workflow
+
+For a new reader who just wants to build, test, and run LeoMem locally, the shortest path is:
+
+```bash
+cmake -S . -B build
+cmake --build build
+ctest --test-dir build --output-on-failure
+./build/benchmarks/leomem_micro_runtime_phase_shift configs/leomem_full_4node.conf
+./build/benchmarks/leomem_workload_iterative_analytics configs/leomem_full_4node.conf
+./scripts/run_ablation_matrix.sh
+```
+
+## License
+
+See [`LICENSE`](/Users/wangbo/Documents/submission/vldb2026/leomem/LICENSE).

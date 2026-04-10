@@ -1,0 +1,6 @@
+config,benchmark,node,nodes,reads,writes,cache_hits,cache_misses,admissions,rejections,switches,wi,si,adaptive,precise_inv,range_inv,owner_biased,handoffs,merged,batches,bytes
+ablation_no_batching,iterative_analytics,0,4,81,45,18,63,3,60,3,0,0,126,3,0,0,0,0,0,0
+baseline_always_cache,iterative_analytics,0,4,81,45,78,3,3,0,3,0,0,126,45,0,45,45,0,45,360
+baseline_fixed_si,iterative_analytics,0,4,81,45,69,12,12,0,3,0,126,0,9,0,0,0,36,9,72
+baseline_fixed_wi,iterative_analytics,0,4,81,45,0,81,0,81,0,126,0,0,0,0,0,0,0,0,0
+leomem_full_4node,iterative_analytics,0,4,81,45,18,63,3,60,21,54,3,69,0,3,0,0,0,45,360

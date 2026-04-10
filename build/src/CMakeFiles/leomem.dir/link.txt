@@ -1,0 +1,2 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libleomem.a CMakeFiles/leomem.dir/api/alloc_api.cc.o CMakeFiles/leomem.dir/api/access_api.cc.o CMakeFiles/leomem.dir/api/sync_api.cc.o CMakeFiles/leomem.dir/api/admin_api.cc.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib libleomem.a

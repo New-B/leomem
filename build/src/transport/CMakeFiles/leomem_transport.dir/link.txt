@@ -1,0 +1,2 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libleomem_transport.a CMakeFiles/leomem_transport.dir/transport_stub.cc.o CMakeFiles/leomem_transport.dir/rdma_transport.cc.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib libleomem_transport.a

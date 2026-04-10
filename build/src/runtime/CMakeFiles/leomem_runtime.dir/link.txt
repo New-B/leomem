@@ -1,0 +1,2 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libleomem_runtime.a CMakeFiles/leomem_runtime.dir/context.cc.o CMakeFiles/leomem_runtime.dir/init.cc.o CMakeFiles/leomem_runtime.dir/config_loader.cc.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib libleomem_runtime.a

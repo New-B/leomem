@@ -1,0 +1,122 @@
+[
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem.dir/api/alloc_api.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/api/alloc_api.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/api/alloc_api.cc",
+  "output": "src/CMakeFiles/leomem.dir/api/alloc_api.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem.dir/api/access_api.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/api/access_api.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/api/access_api.cc",
+  "output": "src/CMakeFiles/leomem.dir/api/access_api.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem.dir/api/sync_api.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/api/sync_api.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/api/sync_api.cc",
+  "output": "src/CMakeFiles/leomem.dir/api/sync_api.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem.dir/api/admin_api.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/api/admin_api.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/api/admin_api.cc",
+  "output": "src/CMakeFiles/leomem.dir/api/admin_api.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src/common",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_common.dir/log.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/common/log.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/common/log.cc",
+  "output": "src/common/CMakeFiles/leomem_common.dir/log.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src/common",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_common.dir/utils.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/common/utils.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/common/utils.cc",
+  "output": "src/common/CMakeFiles/leomem_common.dir/utils.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src/runtime",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_runtime.dir/context.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/runtime/context.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/runtime/context.cc",
+  "output": "src/runtime/CMakeFiles/leomem_runtime.dir/context.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src/runtime",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_runtime.dir/init.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/runtime/init.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/runtime/init.cc",
+  "output": "src/runtime/CMakeFiles/leomem_runtime.dir/init.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src/runtime",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_runtime.dir/config_loader.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/runtime/config_loader.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/runtime/config_loader.cc",
+  "output": "src/runtime/CMakeFiles/leomem_runtime.dir/config_loader.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src/transport",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_transport.dir/transport_stub.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/transport/transport_stub.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/transport/transport_stub.cc",
+  "output": "src/transport/CMakeFiles/leomem_transport.dir/transport_stub.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src/transport",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_transport.dir/rdma_transport.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/transport/rdma_transport.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/transport/rdma_transport.cc",
+  "output": "src/transport/CMakeFiles/leomem_transport.dir/rdma_transport.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src/memory",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_memory.dir/global/dsm_allocator.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/memory/global/dsm_allocator.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/memory/global/dsm_allocator.cc",
+  "output": "src/memory/CMakeFiles/leomem_memory.dir/global/dsm_allocator.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src/memory",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_memory.dir/cache/cache_manager.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/memory/cache/cache_manager.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/memory/cache/cache_manager.cc",
+  "output": "src/memory/CMakeFiles/leomem_memory.dir/cache/cache_manager.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src/metadata",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_metadata.dir/block_table.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/metadata/block_table.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/metadata/block_table.cc",
+  "output": "src/metadata/CMakeFiles/leomem_metadata.dir/block_table.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/src/stats",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_stats.dir/counters.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/src/stats/counters.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/src/stats/counters.cc",
+  "output": "src/stats/CMakeFiles/leomem_stats.dir/counters.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/tests",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_test_smoke.dir/unit/test_smoke.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/tests/unit/test_smoke.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/tests/unit/test_smoke.cc",
+  "output": "tests/CMakeFiles/leomem_test_smoke.dir/unit/test_smoke.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_micro_rw_latency.dir/micro/read_write_latency.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/benchmarks/micro/read_write_latency.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/benchmarks/micro/read_write_latency.cc",
+  "output": "benchmarks/CMakeFiles/leomem_micro_rw_latency.dir/micro/read_write_latency.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_micro_phase_shift.dir/micro/phase_shift_modes.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/benchmarks/micro/phase_shift_modes.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/benchmarks/micro/phase_shift_modes.cc",
+  "output": "benchmarks/CMakeFiles/leomem_micro_phase_shift.dir/micro/phase_shift_modes.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_micro_runtime_phase_shift.dir/micro/runtime_phase_shift.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/benchmarks/micro/runtime_phase_shift.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/benchmarks/micro/runtime_phase_shift.cc",
+  "output": "benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/micro/runtime_phase_shift.cc.o"
+},
+{
+  "directory": "/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks",
+  "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -I/Users/wangbo/Documents/submission/vldb2026/leomem/src -I/Users/wangbo/Documents/submission/vldb2026/leomem/include -g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -mmacosx-version-min=13.2 -Wall -Wextra -Wpedantic -Wno-unused-parameter -o CMakeFiles/leomem_workload_iterative_analytics.dir/workload/iterative_analytics.cc.o -c /Users/wangbo/Documents/submission/vldb2026/leomem/benchmarks/workload/iterative_analytics.cc",
+  "file": "/Users/wangbo/Documents/submission/vldb2026/leomem/benchmarks/workload/iterative_analytics.cc",
+  "output": "benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/workload/iterative_analytics.cc.o"
+}
+]
