@@ -87,7 +87,11 @@ clean: benchmarks/clean
 benchmarks/all: benchmarks/CMakeFiles/leomem_micro_rw_latency.dir/all
 benchmarks/all: benchmarks/CMakeFiles/leomem_micro_phase_shift.dir/all
 benchmarks/all: benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/all
+benchmarks/all: benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/all
 benchmarks/all: benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/all
+benchmarks/all: benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/all
+benchmarks/all: benchmarks/CMakeFiles/leomem_workload_kmeans.dir/all
+benchmarks/all: benchmarks/CMakeFiles/leomem_workload_pagerank.dir/all
 .PHONY : benchmarks/all
 
 # Recursive "preinstall" directory target.
@@ -98,7 +102,11 @@ benchmarks/preinstall:
 benchmarks/clean: benchmarks/CMakeFiles/leomem_micro_rw_latency.dir/clean
 benchmarks/clean: benchmarks/CMakeFiles/leomem_micro_phase_shift.dir/clean
 benchmarks/clean: benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/clean
+benchmarks/clean: benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/clean
 benchmarks/clean: benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/clean
+benchmarks/clean: benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/clean
+benchmarks/clean: benchmarks/CMakeFiles/leomem_workload_kmeans.dir/clean
+benchmarks/clean: benchmarks/CMakeFiles/leomem_workload_pagerank.dir/clean
 .PHONY : benchmarks/clean
 
 #=============================================================================
@@ -302,7 +310,7 @@ src/common/CMakeFiles/leomem_common.dir/clean:
 src/runtime/CMakeFiles/leomem_runtime.dir/all: src/common/CMakeFiles/leomem_common.dir/all
 	$(MAKE) $(MAKESILENT) -f src/runtime/CMakeFiles/leomem_runtime.dir/build.make src/runtime/CMakeFiles/leomem_runtime.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/runtime/CMakeFiles/leomem_runtime.dir/build.make src/runtime/CMakeFiles/leomem_runtime.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=20,21,22,23 "Built target leomem_runtime"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=22,23,24,25 "Built target leomem_runtime"
 .PHONY : src/runtime/CMakeFiles/leomem_runtime.dir/all
 
 # Build rule for subdir invocation for target.
@@ -328,7 +336,7 @@ src/runtime/CMakeFiles/leomem_runtime.dir/clean:
 src/transport/CMakeFiles/leomem_transport.dir/all: src/common/CMakeFiles/leomem_common.dir/all
 	$(MAKE) $(MAKESILENT) -f src/transport/CMakeFiles/leomem_transport.dir/build.make src/transport/CMakeFiles/leomem_transport.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/transport/CMakeFiles/leomem_transport.dir/build.make src/transport/CMakeFiles/leomem_transport.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=28,29,30 "Built target leomem_transport"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=30,31,32 "Built target leomem_transport"
 .PHONY : src/transport/CMakeFiles/leomem_transport.dir/all
 
 # Build rule for subdir invocation for target.
@@ -406,7 +414,7 @@ src/metadata/CMakeFiles/leomem_metadata.dir/clean:
 src/stats/CMakeFiles/leomem_stats.dir/all:
 	$(MAKE) $(MAKESILENT) -f src/stats/CMakeFiles/leomem_stats.dir/build.make src/stats/CMakeFiles/leomem_stats.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/stats/CMakeFiles/leomem_stats.dir/build.make src/stats/CMakeFiles/leomem_stats.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=24,25 "Built target leomem_stats"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=26,27 "Built target leomem_stats"
 .PHONY : src/stats/CMakeFiles/leomem_stats.dir/all
 
 # Build rule for subdir invocation for target.
@@ -438,7 +446,7 @@ tests/CMakeFiles/leomem_test_smoke.dir/all: src/metadata/CMakeFiles/leomem_metad
 tests/CMakeFiles/leomem_test_smoke.dir/all: src/stats/CMakeFiles/leomem_stats.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/leomem_test_smoke.dir/build.make tests/CMakeFiles/leomem_test_smoke.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/leomem_test_smoke.dir/build.make tests/CMakeFiles/leomem_test_smoke.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=26,27 "Built target leomem_test_smoke"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=28,29 "Built target leomem_test_smoke"
 .PHONY : tests/CMakeFiles/leomem_test_smoke.dir/all
 
 # Build rule for subdir invocation for target.
@@ -470,7 +478,7 @@ benchmarks/CMakeFiles/leomem_micro_rw_latency.dir/all: src/metadata/CMakeFiles/l
 benchmarks/CMakeFiles/leomem_micro_rw_latency.dir/all: src/stats/CMakeFiles/leomem_stats.dir/all
 	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_rw_latency.dir/build.make benchmarks/CMakeFiles/leomem_micro_rw_latency.dir/depend
 	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_rw_latency.dir/build.make benchmarks/CMakeFiles/leomem_micro_rw_latency.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=18,19 "Built target leomem_micro_rw_latency"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=20,21 "Built target leomem_micro_rw_latency"
 .PHONY : benchmarks/CMakeFiles/leomem_micro_rw_latency.dir/all
 
 # Build rule for subdir invocation for target.
@@ -502,7 +510,7 @@ benchmarks/CMakeFiles/leomem_micro_phase_shift.dir/all: src/metadata/CMakeFiles/
 benchmarks/CMakeFiles/leomem_micro_phase_shift.dir/all: src/stats/CMakeFiles/leomem_stats.dir/all
 	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_phase_shift.dir/build.make benchmarks/CMakeFiles/leomem_micro_phase_shift.dir/depend
 	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_phase_shift.dir/build.make benchmarks/CMakeFiles/leomem_micro_phase_shift.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=14,15 "Built target leomem_micro_phase_shift"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=16,17 "Built target leomem_micro_phase_shift"
 .PHONY : benchmarks/CMakeFiles/leomem_micro_phase_shift.dir/all
 
 # Build rule for subdir invocation for target.
@@ -534,7 +542,7 @@ benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/all: src/metadata/CMa
 benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/all: src/stats/CMakeFiles/leomem_stats.dir/all
 	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/build.make benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/depend
 	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/build.make benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=16,17 "Built target leomem_micro_runtime_phase_shift"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=18,19 "Built target leomem_micro_runtime_phase_shift"
 .PHONY : benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/all
 
 # Build rule for subdir invocation for target.
@@ -554,6 +562,38 @@ benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/clean:
 .PHONY : benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/clean
 
 #=============================================================================
+# Target rules for target benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir
+
+# All Build rule for target.
+benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/all: src/CMakeFiles/leomem.dir/all
+benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/all: src/common/CMakeFiles/leomem_common.dir/all
+benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/all: src/runtime/CMakeFiles/leomem_runtime.dir/all
+benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/all: src/transport/CMakeFiles/leomem_transport.dir/all
+benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/all: src/memory/CMakeFiles/leomem_memory.dir/all
+benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/all: src/metadata/CMakeFiles/leomem_metadata.dir/all
+benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/all: src/stats/CMakeFiles/leomem_stats.dir/all
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/build.make benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/depend
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/build.make benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=14,15 "Built target leomem_micro_adaptive_coherence_paper"
+.PHONY : benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/all
+
+# Build rule for subdir invocation for target.
+benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles 24
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles 0
+.PHONY : benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/rule
+
+# Convenience name for target.
+leomem_micro_adaptive_coherence_paper: benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/rule
+.PHONY : leomem_micro_adaptive_coherence_paper
+
+# clean rule for target.
+benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/clean:
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/build.make benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/clean
+.PHONY : benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/clean
+
+#=============================================================================
 # Target rules for target benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir
 
 # All Build rule for target.
@@ -566,7 +606,7 @@ benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/all: src/metadata/
 benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/all: src/stats/CMakeFiles/leomem_stats.dir/all
 	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/build.make benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/depend
 	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/build.make benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=31,32 "Built target leomem_workload_iterative_analytics"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=33,34 "Built target leomem_workload_iterative_analytics"
 .PHONY : benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/all
 
 # Build rule for subdir invocation for target.
@@ -584,6 +624,102 @@ leomem_workload_iterative_analytics: benchmarks/CMakeFiles/leomem_workload_itera
 benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/clean:
 	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/build.make benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/clean
 .PHONY : benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/clean
+
+#=============================================================================
+# Target rules for target benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir
+
+# All Build rule for target.
+benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/all: src/CMakeFiles/leomem.dir/all
+benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/all: src/common/CMakeFiles/leomem_common.dir/all
+benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/all: src/runtime/CMakeFiles/leomem_runtime.dir/all
+benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/all: src/transport/CMakeFiles/leomem_transport.dir/all
+benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/all: src/memory/CMakeFiles/leomem_memory.dir/all
+benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/all: src/metadata/CMakeFiles/leomem_metadata.dir/all
+benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/all: src/stats/CMakeFiles/leomem_stats.dir/all
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/build.make benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/depend
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/build.make benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=39,40 "Built target leomem_workload_ycsb_mixed"
+.PHONY : benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/all
+
+# Build rule for subdir invocation for target.
+benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles 24
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles 0
+.PHONY : benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/rule
+
+# Convenience name for target.
+leomem_workload_ycsb_mixed: benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/rule
+.PHONY : leomem_workload_ycsb_mixed
+
+# clean rule for target.
+benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/clean:
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/build.make benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/clean
+.PHONY : benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/clean
+
+#=============================================================================
+# Target rules for target benchmarks/CMakeFiles/leomem_workload_kmeans.dir
+
+# All Build rule for target.
+benchmarks/CMakeFiles/leomem_workload_kmeans.dir/all: src/CMakeFiles/leomem.dir/all
+benchmarks/CMakeFiles/leomem_workload_kmeans.dir/all: src/common/CMakeFiles/leomem_common.dir/all
+benchmarks/CMakeFiles/leomem_workload_kmeans.dir/all: src/runtime/CMakeFiles/leomem_runtime.dir/all
+benchmarks/CMakeFiles/leomem_workload_kmeans.dir/all: src/transport/CMakeFiles/leomem_transport.dir/all
+benchmarks/CMakeFiles/leomem_workload_kmeans.dir/all: src/memory/CMakeFiles/leomem_memory.dir/all
+benchmarks/CMakeFiles/leomem_workload_kmeans.dir/all: src/metadata/CMakeFiles/leomem_metadata.dir/all
+benchmarks/CMakeFiles/leomem_workload_kmeans.dir/all: src/stats/CMakeFiles/leomem_stats.dir/all
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_kmeans.dir/build.make benchmarks/CMakeFiles/leomem_workload_kmeans.dir/depend
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_kmeans.dir/build.make benchmarks/CMakeFiles/leomem_workload_kmeans.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=35,36 "Built target leomem_workload_kmeans"
+.PHONY : benchmarks/CMakeFiles/leomem_workload_kmeans.dir/all
+
+# Build rule for subdir invocation for target.
+benchmarks/CMakeFiles/leomem_workload_kmeans.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles 24
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmarks/CMakeFiles/leomem_workload_kmeans.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles 0
+.PHONY : benchmarks/CMakeFiles/leomem_workload_kmeans.dir/rule
+
+# Convenience name for target.
+leomem_workload_kmeans: benchmarks/CMakeFiles/leomem_workload_kmeans.dir/rule
+.PHONY : leomem_workload_kmeans
+
+# clean rule for target.
+benchmarks/CMakeFiles/leomem_workload_kmeans.dir/clean:
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_kmeans.dir/build.make benchmarks/CMakeFiles/leomem_workload_kmeans.dir/clean
+.PHONY : benchmarks/CMakeFiles/leomem_workload_kmeans.dir/clean
+
+#=============================================================================
+# Target rules for target benchmarks/CMakeFiles/leomem_workload_pagerank.dir
+
+# All Build rule for target.
+benchmarks/CMakeFiles/leomem_workload_pagerank.dir/all: src/CMakeFiles/leomem.dir/all
+benchmarks/CMakeFiles/leomem_workload_pagerank.dir/all: src/common/CMakeFiles/leomem_common.dir/all
+benchmarks/CMakeFiles/leomem_workload_pagerank.dir/all: src/runtime/CMakeFiles/leomem_runtime.dir/all
+benchmarks/CMakeFiles/leomem_workload_pagerank.dir/all: src/transport/CMakeFiles/leomem_transport.dir/all
+benchmarks/CMakeFiles/leomem_workload_pagerank.dir/all: src/memory/CMakeFiles/leomem_memory.dir/all
+benchmarks/CMakeFiles/leomem_workload_pagerank.dir/all: src/metadata/CMakeFiles/leomem_metadata.dir/all
+benchmarks/CMakeFiles/leomem_workload_pagerank.dir/all: src/stats/CMakeFiles/leomem_stats.dir/all
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_pagerank.dir/build.make benchmarks/CMakeFiles/leomem_workload_pagerank.dir/depend
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_pagerank.dir/build.make benchmarks/CMakeFiles/leomem_workload_pagerank.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles --progress-num=37,38 "Built target leomem_workload_pagerank"
+.PHONY : benchmarks/CMakeFiles/leomem_workload_pagerank.dir/all
+
+# Build rule for subdir invocation for target.
+benchmarks/CMakeFiles/leomem_workload_pagerank.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles 24
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmarks/CMakeFiles/leomem_workload_pagerank.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wangbo/Documents/submission/vldb2026/leomem/build/CMakeFiles 0
+.PHONY : benchmarks/CMakeFiles/leomem_workload_pagerank.dir/rule
+
+# Convenience name for target.
+leomem_workload_pagerank: benchmarks/CMakeFiles/leomem_workload_pagerank.dir/rule
+.PHONY : leomem_workload_pagerank
+
+# clean rule for target.
+benchmarks/CMakeFiles/leomem_workload_pagerank.dir/clean:
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_pagerank.dir/build.make benchmarks/CMakeFiles/leomem_workload_pagerank.dir/clean
+.PHONY : benchmarks/CMakeFiles/leomem_workload_pagerank.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

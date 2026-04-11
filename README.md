@@ -292,19 +292,31 @@ Example output from `leomem_micro_runtime_phase_shift` includes:
 
 ## Running The Workload Benchmark
 
-The repository also includes a workload-style benchmark:
+The repository also includes several workload-style benchmarks:
 
 - [`build/benchmarks/leomem_workload_iterative_analytics`](/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/leomem_workload_iterative_analytics)
+- [`build/benchmarks/leomem_workload_ycsb_mixed`](/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/leomem_workload_ycsb_mixed)
+- [`build/benchmarks/leomem_workload_kmeans`](/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/leomem_workload_kmeans)
+- [`build/benchmarks/leomem_workload_pagerank`](/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/leomem_workload_pagerank)
 
-Run it with the full LeoMem config:
+Representative commands with the full 4-node LeoMem config are:
 
 ```bash
 ./build/benchmarks/leomem_workload_iterative_analytics configs/leomem_full_4node.conf
+./build/benchmarks/leomem_workload_ycsb_mixed configs/leomem_full_4node.conf A 20000 4096
+./build/benchmarks/leomem_workload_ycsb_mixed configs/leomem_full_4node.conf B 20000 4096
+./build/benchmarks/leomem_workload_kmeans configs/leomem_full_4node.conf 4096 8 4 4
+./build/benchmarks/leomem_workload_pagerank configs/leomem_full_4node.conf 2048 4 4
 ```
 
-This benchmark emulates an iterative analytics pattern with repeated read phases, update phases, and synchronization points. It is useful as a lightweight stand-in for graph-style or iterative data analytics workloads where sharing patterns evolve over time.
+What each workload covers:
 
-Its output ends with a `csv:` line so the result can be collected automatically by experiment scripts.
+- `leomem_workload_iterative_analytics`: a compact iterative analytics loop with repeated read/update/fence phases
+- `leomem_workload_ycsb_mixed`: YCSB-like mixed read/write access patterns with configurable workload types
+- `leomem_workload_kmeans`: iterative centroid updates over shared DSM-resident partial sums and centroids
+- `leomem_workload_pagerank`: graph-style scatter/gather iterations over shared rank and accumulator vectors
+
+Each workload ends with a `csv:` line so the output can be collected automatically by experiment scripts.
 
 ## Running A 4-Node Setup
 
@@ -329,10 +341,13 @@ ctest --test-dir build --output-on-failure
 ./build/benchmarks/leomem_micro_runtime_phase_shift configs/leomem_full_4node.conf
 ```
 
-4. Run the workload benchmark at 4-node scale:
+4. Run the workload benchmarks at 4-node scale:
 
 ```bash
 ./build/benchmarks/leomem_workload_iterative_analytics configs/leomem_full_4node.conf
+./build/benchmarks/leomem_workload_ycsb_mixed configs/leomem_full_4node.conf A 20000 4096
+./build/benchmarks/leomem_workload_kmeans configs/leomem_full_4node.conf 4096 8 4 4
+./build/benchmarks/leomem_workload_pagerank configs/leomem_full_4node.conf 2048 4 4
 ```
 
 5. Run the bundled comparison matrix:
@@ -359,9 +374,17 @@ The simplest way to run the provided comparison matrix is:
 This script will:
 
 1. configure and build the project
-2. run the workload benchmark on a set of bundled configs
+2. run iterative analytics, YCSB-like mixed workloads, K-means, and PageRank on a set of bundled configs
 3. store raw outputs in [`results`](/Users/wangbo/Documents/submission/vldb2026/leomem/results)
 4. aggregate the `csv:` lines into [`results/summary.csv`](/Users/wangbo/Documents/submission/vldb2026/leomem/results/summary.csv)
+
+The raw output file names follow this pattern:
+
+- `<config>_iterative.txt`
+- `<config>_ycsb_A.txt`
+- `<config>_ycsb_B.txt`
+- `<config>_kmeans.txt`
+- `<config>_pagerank.txt`
 
 If you only want to re-aggregate existing outputs, run:
 
@@ -447,9 +470,8 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ./build/benchmarks/leomem_micro_runtime_phase_shift configs/leomem_full_4node.conf
 ./build/benchmarks/leomem_workload_iterative_analytics configs/leomem_full_4node.conf
+./build/benchmarks/leomem_workload_kmeans configs/leomem_full_4node.conf 4096 8 4 4
+./build/benchmarks/leomem_workload_pagerank configs/leomem_full_4node.conf 2048 4 4
 ./scripts/run_ablation_matrix.sh
 ```
 
-## License
-
-See [`LICENSE`](/Users/wangbo/Documents/submission/vldb2026/leomem/LICENSE).

@@ -1,0 +1,8 @@
+k-means workload
+nodes=4 points=4096 clusters=8 dims=4 iterations=4 runtime_ms=128.027
+ops: reads=16544 writes=16584 remote_reads=16544 remote_writes=16584
+cache: hits=16544 misses=0 admissions=0 rejections=0
+coherence: switches=3 wi=0 si=0 adaptive=33128
+protocol: precise_inv=16544 range_inv=0 owner_biased=16584 handoffs=3
+batching: queued=16584 merged=0 flushed_writes=16584 batches=16584 bytes=1192448
+csv: benchmark=kmeans,nodes=4,points=4096,clusters=8,dims=4,iterations=4,runtime_ms=128.027,reads=16544,writes=16584,cache_hits=16544,cache_misses=0,admissions=0,rejections=0,switches=3,wi=0,si=0,adaptive=33128,precise_inv=16544,range_inv=0,owner_biased=16584,handoffs=3,merged=0,batches=16584,bytes=1192448

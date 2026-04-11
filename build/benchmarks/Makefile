@@ -169,6 +169,20 @@ leomem_micro_runtime_phase_shift/fast:
 .PHONY : leomem_micro_runtime_phase_shift/fast
 
 # Convenience name for target.
+benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/rule:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/rule
+.PHONY : benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/rule
+
+# Convenience name for target.
+leomem_micro_adaptive_coherence_paper: benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/rule
+.PHONY : leomem_micro_adaptive_coherence_paper
+
+# fast build rule for target.
+leomem_micro_adaptive_coherence_paper/fast:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/build.make benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/build
+.PHONY : leomem_micro_adaptive_coherence_paper/fast
+
+# Convenience name for target.
 benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/rule:
 	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/rule
 .PHONY : benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/rule
@@ -181,6 +195,72 @@ leomem_workload_iterative_analytics: benchmarks/CMakeFiles/leomem_workload_itera
 leomem_workload_iterative_analytics/fast:
 	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/build.make benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/build
 .PHONY : leomem_workload_iterative_analytics/fast
+
+# Convenience name for target.
+benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/rule:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/rule
+.PHONY : benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/rule
+
+# Convenience name for target.
+leomem_workload_ycsb_mixed: benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/rule
+.PHONY : leomem_workload_ycsb_mixed
+
+# fast build rule for target.
+leomem_workload_ycsb_mixed/fast:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/build.make benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/build
+.PHONY : leomem_workload_ycsb_mixed/fast
+
+# Convenience name for target.
+benchmarks/CMakeFiles/leomem_workload_kmeans.dir/rule:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmarks/CMakeFiles/leomem_workload_kmeans.dir/rule
+.PHONY : benchmarks/CMakeFiles/leomem_workload_kmeans.dir/rule
+
+# Convenience name for target.
+leomem_workload_kmeans: benchmarks/CMakeFiles/leomem_workload_kmeans.dir/rule
+.PHONY : leomem_workload_kmeans
+
+# fast build rule for target.
+leomem_workload_kmeans/fast:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_kmeans.dir/build.make benchmarks/CMakeFiles/leomem_workload_kmeans.dir/build
+.PHONY : leomem_workload_kmeans/fast
+
+# Convenience name for target.
+benchmarks/CMakeFiles/leomem_workload_pagerank.dir/rule:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 benchmarks/CMakeFiles/leomem_workload_pagerank.dir/rule
+.PHONY : benchmarks/CMakeFiles/leomem_workload_pagerank.dir/rule
+
+# Convenience name for target.
+leomem_workload_pagerank: benchmarks/CMakeFiles/leomem_workload_pagerank.dir/rule
+.PHONY : leomem_workload_pagerank
+
+# fast build rule for target.
+leomem_workload_pagerank/fast:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_pagerank.dir/build.make benchmarks/CMakeFiles/leomem_workload_pagerank.dir/build
+.PHONY : leomem_workload_pagerank/fast
+
+micro/adaptive_coherence_paper.o: micro/adaptive_coherence_paper.cc.o
+.PHONY : micro/adaptive_coherence_paper.o
+
+# target to build an object file
+micro/adaptive_coherence_paper.cc.o:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/build.make benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/micro/adaptive_coherence_paper.cc.o
+.PHONY : micro/adaptive_coherence_paper.cc.o
+
+micro/adaptive_coherence_paper.i: micro/adaptive_coherence_paper.cc.i
+.PHONY : micro/adaptive_coherence_paper.i
+
+# target to preprocess a source file
+micro/adaptive_coherence_paper.cc.i:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/build.make benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/micro/adaptive_coherence_paper.cc.i
+.PHONY : micro/adaptive_coherence_paper.cc.i
+
+micro/adaptive_coherence_paper.s: micro/adaptive_coherence_paper.cc.s
+.PHONY : micro/adaptive_coherence_paper.s
+
+# target to generate assembly for a file
+micro/adaptive_coherence_paper.cc.s:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/build.make benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/micro/adaptive_coherence_paper.cc.s
+.PHONY : micro/adaptive_coherence_paper.cc.s
 
 micro/phase_shift_modes.o: micro/phase_shift_modes.cc.o
 .PHONY : micro/phase_shift_modes.o
@@ -278,6 +358,78 @@ workload/iterative_analytics.cc.s:
 	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/build.make benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/workload/iterative_analytics.cc.s
 .PHONY : workload/iterative_analytics.cc.s
 
+workload/kmeans_workload.o: workload/kmeans_workload.cc.o
+.PHONY : workload/kmeans_workload.o
+
+# target to build an object file
+workload/kmeans_workload.cc.o:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_kmeans.dir/build.make benchmarks/CMakeFiles/leomem_workload_kmeans.dir/workload/kmeans_workload.cc.o
+.PHONY : workload/kmeans_workload.cc.o
+
+workload/kmeans_workload.i: workload/kmeans_workload.cc.i
+.PHONY : workload/kmeans_workload.i
+
+# target to preprocess a source file
+workload/kmeans_workload.cc.i:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_kmeans.dir/build.make benchmarks/CMakeFiles/leomem_workload_kmeans.dir/workload/kmeans_workload.cc.i
+.PHONY : workload/kmeans_workload.cc.i
+
+workload/kmeans_workload.s: workload/kmeans_workload.cc.s
+.PHONY : workload/kmeans_workload.s
+
+# target to generate assembly for a file
+workload/kmeans_workload.cc.s:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_kmeans.dir/build.make benchmarks/CMakeFiles/leomem_workload_kmeans.dir/workload/kmeans_workload.cc.s
+.PHONY : workload/kmeans_workload.cc.s
+
+workload/pagerank_workload.o: workload/pagerank_workload.cc.o
+.PHONY : workload/pagerank_workload.o
+
+# target to build an object file
+workload/pagerank_workload.cc.o:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_pagerank.dir/build.make benchmarks/CMakeFiles/leomem_workload_pagerank.dir/workload/pagerank_workload.cc.o
+.PHONY : workload/pagerank_workload.cc.o
+
+workload/pagerank_workload.i: workload/pagerank_workload.cc.i
+.PHONY : workload/pagerank_workload.i
+
+# target to preprocess a source file
+workload/pagerank_workload.cc.i:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_pagerank.dir/build.make benchmarks/CMakeFiles/leomem_workload_pagerank.dir/workload/pagerank_workload.cc.i
+.PHONY : workload/pagerank_workload.cc.i
+
+workload/pagerank_workload.s: workload/pagerank_workload.cc.s
+.PHONY : workload/pagerank_workload.s
+
+# target to generate assembly for a file
+workload/pagerank_workload.cc.s:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_pagerank.dir/build.make benchmarks/CMakeFiles/leomem_workload_pagerank.dir/workload/pagerank_workload.cc.s
+.PHONY : workload/pagerank_workload.cc.s
+
+workload/ycsb_mixed.o: workload/ycsb_mixed.cc.o
+.PHONY : workload/ycsb_mixed.o
+
+# target to build an object file
+workload/ycsb_mixed.cc.o:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/build.make benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/workload/ycsb_mixed.cc.o
+.PHONY : workload/ycsb_mixed.cc.o
+
+workload/ycsb_mixed.i: workload/ycsb_mixed.cc.i
+.PHONY : workload/ycsb_mixed.i
+
+# target to preprocess a source file
+workload/ycsb_mixed.cc.i:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/build.make benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/workload/ycsb_mixed.cc.i
+.PHONY : workload/ycsb_mixed.cc.i
+
+workload/ycsb_mixed.s: workload/ycsb_mixed.cc.s
+.PHONY : workload/ycsb_mixed.s
+
+# target to generate assembly for a file
+workload/ycsb_mixed.cc.s:
+	cd /Users/wangbo/Documents/submission/vldb2026/leomem/build && $(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/build.make benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/workload/ycsb_mixed.cc.s
+.PHONY : workload/ycsb_mixed.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -287,10 +439,17 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... leomem_micro_adaptive_coherence_paper"
 	@echo "... leomem_micro_phase_shift"
 	@echo "... leomem_micro_runtime_phase_shift"
 	@echo "... leomem_micro_rw_latency"
 	@echo "... leomem_workload_iterative_analytics"
+	@echo "... leomem_workload_kmeans"
+	@echo "... leomem_workload_pagerank"
+	@echo "... leomem_workload_ycsb_mixed"
+	@echo "... micro/adaptive_coherence_paper.o"
+	@echo "... micro/adaptive_coherence_paper.i"
+	@echo "... micro/adaptive_coherence_paper.s"
 	@echo "... micro/phase_shift_modes.o"
 	@echo "... micro/phase_shift_modes.i"
 	@echo "... micro/phase_shift_modes.s"
@@ -303,6 +462,15 @@ help:
 	@echo "... workload/iterative_analytics.o"
 	@echo "... workload/iterative_analytics.i"
 	@echo "... workload/iterative_analytics.s"
+	@echo "... workload/kmeans_workload.o"
+	@echo "... workload/kmeans_workload.i"
+	@echo "... workload/kmeans_workload.s"
+	@echo "... workload/pagerank_workload.o"
+	@echo "... workload/pagerank_workload.i"
+	@echo "... workload/pagerank_workload.s"
+	@echo "... workload/ycsb_mixed.o"
+	@echo "... workload/ycsb_mixed.i"
+	@echo "... workload/ycsb_mixed.s"
 .PHONY : help
 
 

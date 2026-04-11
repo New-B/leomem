@@ -28,6 +28,7 @@ struct BlockMeta {
     std::atomic<std::uint32_t> last_access_type{static_cast<std::uint32_t>(AccessType::kRead)};
     std::atomic<std::uint64_t> coherence_switch_count{0};
     std::atomic<std::uint64_t> owner_epoch{0};
+    std::atomic<std::uint64_t> last_validated_version{0};
     std::atomic<bool> cache_admitted{false};
 };
 

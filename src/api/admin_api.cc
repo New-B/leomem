@@ -29,6 +29,7 @@ const char* StatusToString(Status s) {
         case Status::kNoMemory: return "NoMemory";
         case Status::kNotFound: return "NotFound";
         case Status::kOutOfRange: return "OutOfRange";
+        case Status::kTimedOut: return "TimedOut";
         case Status::kUnimplemented: return "Unimplemented";
         case Status::kInternalError: return "InternalError";
         default: return "Unknown";

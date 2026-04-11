@@ -36,7 +36,11 @@
 /Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/CMakeFiles/leomem_micro_rw_latency.dir
 /Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/CMakeFiles/leomem_micro_phase_shift.dir
 /Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir
+/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir
 /Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir
+/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir
+/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/CMakeFiles/leomem_workload_kmeans.dir
+/Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/CMakeFiles/leomem_workload_pagerank.dir
 /Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/CMakeFiles/test.dir
 /Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/CMakeFiles/edit_cache.dir
 /Users/wangbo/Documents/submission/vldb2026/leomem/build/benchmarks/CMakeFiles/rebuild_cache.dir

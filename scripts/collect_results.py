@@ -25,17 +25,20 @@ def main() -> int:
 
     results_dir = pathlib.Path(sys.argv[1])
     rows = []
+    columns = ["config"]
     for path in sorted(results_dir.glob("*.txt")):
         parsed = parse_csv_line(path.read_text())
         if parsed is None:
             continue
         parsed["config"] = path.stem
         rows.append(parsed)
+        for key in parsed.keys():
+            if key not in columns:
+                columns.append(key)
 
     if not rows:
         return 0
 
-    columns = ["config"] + [key for key in rows[0].keys() if key != "config"]
     writer = csv.DictWriter(sys.stdout, fieldnames=columns)
     writer.writeheader()
     for row in rows:

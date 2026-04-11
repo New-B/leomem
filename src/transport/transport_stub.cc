@@ -19,6 +19,24 @@ namespace {
 std::mutex g_control_mu;
 std::unordered_map<NodeId, std::deque<ControlMessage>> g_control_inboxes;
 
+bool IsAckOpcode(ControlOpcode opcode) {
+    return opcode == ControlOpcode::kInvalidateAck || opcode == ControlOpcode::kOwnerTransferAck;
+}
+
+ControlOpcode AckOpcodeFor(ControlOpcode opcode) {
+    switch (opcode) {
+        case ControlOpcode::kInvalidateRange:
+            return ControlOpcode::kInvalidateAck;
+        case ControlOpcode::kOwnerTransfer:
+            return ControlOpcode::kOwnerTransferAck;
+        case ControlOpcode::kInvalidateAck:
+            return ControlOpcode::kInvalidateAck;
+        case ControlOpcode::kOwnerTransferAck:
+            return ControlOpcode::kOwnerTransferAck;
+    }
+    return ControlOpcode::kInvalidateAck;
+}
+
 }  // namespace
 
 class StubTransport final : public Transport {
@@ -117,6 +135,14 @@ public:
 
     Status PostControlMessage(const ControlMessage& message) override {
         std::lock_guard<std::mutex> lk(g_control_mu);
+        if (message.target_node != cfg_.node_id && !IsAckOpcode(message.opcode)) {
+            ControlMessage ack = message;
+            ack.opcode = AckOpcodeFor(message.opcode);
+            ack.source_node = message.target_node;
+            ack.target_node = message.source_node;
+            g_control_inboxes[ack.target_node].push_back(ack);
+            return Status::kOk;
+        }
         g_control_inboxes[message.target_node].push_back(message);
         return Status::kOk;
     }

@@ -270,6 +270,19 @@ leomem_micro_runtime_phase_shift/fast:
 .PHONY : leomem_micro_runtime_phase_shift/fast
 
 #=============================================================================
+# Target rules for targets named leomem_micro_adaptive_coherence_paper
+
+# Build rule for target.
+leomem_micro_adaptive_coherence_paper: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 leomem_micro_adaptive_coherence_paper
+.PHONY : leomem_micro_adaptive_coherence_paper
+
+# fast build rule for target.
+leomem_micro_adaptive_coherence_paper/fast:
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/build.make benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/build
+.PHONY : leomem_micro_adaptive_coherence_paper/fast
+
+#=============================================================================
 # Target rules for targets named leomem_workload_iterative_analytics
 
 # Build rule for target.
@@ -281,6 +294,45 @@ leomem_workload_iterative_analytics: cmake_check_build_system
 leomem_workload_iterative_analytics/fast:
 	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/build.make benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/build
 .PHONY : leomem_workload_iterative_analytics/fast
+
+#=============================================================================
+# Target rules for targets named leomem_workload_ycsb_mixed
+
+# Build rule for target.
+leomem_workload_ycsb_mixed: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 leomem_workload_ycsb_mixed
+.PHONY : leomem_workload_ycsb_mixed
+
+# fast build rule for target.
+leomem_workload_ycsb_mixed/fast:
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/build.make benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/build
+.PHONY : leomem_workload_ycsb_mixed/fast
+
+#=============================================================================
+# Target rules for targets named leomem_workload_kmeans
+
+# Build rule for target.
+leomem_workload_kmeans: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 leomem_workload_kmeans
+.PHONY : leomem_workload_kmeans
+
+# fast build rule for target.
+leomem_workload_kmeans/fast:
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_kmeans.dir/build.make benchmarks/CMakeFiles/leomem_workload_kmeans.dir/build
+.PHONY : leomem_workload_kmeans/fast
+
+#=============================================================================
+# Target rules for targets named leomem_workload_pagerank
+
+# Build rule for target.
+leomem_workload_pagerank: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 leomem_workload_pagerank
+.PHONY : leomem_workload_pagerank
+
+# fast build rule for target.
+leomem_workload_pagerank/fast:
+	$(MAKE) $(MAKESILENT) -f benchmarks/CMakeFiles/leomem_workload_pagerank.dir/build.make benchmarks/CMakeFiles/leomem_workload_pagerank.dir/build
+.PHONY : leomem_workload_pagerank/fast
 
 # Help Target
 help:
@@ -295,6 +347,7 @@ help:
 	@echo "... leomem_common"
 	@echo "... leomem_memory"
 	@echo "... leomem_metadata"
+	@echo "... leomem_micro_adaptive_coherence_paper"
 	@echo "... leomem_micro_phase_shift"
 	@echo "... leomem_micro_runtime_phase_shift"
 	@echo "... leomem_micro_rw_latency"
@@ -303,6 +356,9 @@ help:
 	@echo "... leomem_test_smoke"
 	@echo "... leomem_transport"
 	@echo "... leomem_workload_iterative_analytics"
+	@echo "... leomem_workload_kmeans"
+	@echo "... leomem_workload_pagerank"
+	@echo "... leomem_workload_ycsb_mixed"
 .PHONY : help
 
 

@@ -10,6 +10,7 @@ enum class Status {
     kNoMemory,
     kNotFound,
     kOutOfRange,
+    kTimedOut,
     kUnimplemented,
     kInternalError,
 };

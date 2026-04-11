@@ -94,7 +94,23 @@ std::uint64_t RuntimeContext::NextControlRequestId() {
 void RuntimeContext::TrackPendingControlAck(std::uint64_t request_id) {
     if (request_id == 0) return;
     std::lock_guard<std::mutex> lk(mu_);
-    pending_control_acks_.insert(request_id);
+    PendingControlAck pending;
+    pending.message.request_id = request_id;
+    pending.message.source_node = config_.node_id;
+    pending.message.target_node = config_.node_id;
+    pending.polls_remaining = config_.control_ack_timeout_polls;
+    pending.retries_remaining = 0;
+    pending_control_acks_[request_id] = pending;
+}
+
+void RuntimeContext::TrackPendingControlAck(const ControlMessage& message) {
+    if (message.request_id == 0) return;
+    std::lock_guard<std::mutex> lk(mu_);
+    PendingControlAck pending;
+    pending.message = message;
+    pending.polls_remaining = config_.control_ack_timeout_polls;
+    pending.retries_remaining = config_.control_ack_max_retries;
+    pending_control_acks_[message.request_id] = pending;
 }
 
 void RuntimeContext::CompleteControlAck(std::uint64_t request_id) {
@@ -111,6 +127,31 @@ bool RuntimeContext::HasPendingControlAck(std::uint64_t request_id) {
 std::size_t RuntimeContext::PendingControlAcks() const {
     std::lock_guard<std::mutex> lk(mu_);
     return pending_control_acks_.size();
+}
+
+Status RuntimeContext::AdvanceControlAckTimeouts(std::vector<ControlMessage>* retries) {
+    if (retries == nullptr) return Status::kInvalidArg;
+    retries->clear();
+
+    std::lock_guard<std::mutex> lk(mu_);
+    for (auto it = pending_control_acks_.begin(); it != pending_control_acks_.end();) {
+        auto& pending = it->second;
+        if (pending.polls_remaining > 0) {
+            --pending.polls_remaining;
+            ++it;
+            continue;
+        }
+
+        if (pending.retries_remaining == 0) {
+            return Status::kTimedOut;
+        }
+
+        retries->push_back(pending.message);
+        --pending.retries_remaining;
+        pending.polls_remaining = config_.control_ack_timeout_polls;
+        ++it;
+    }
+    return Status::kOk;
 }
 
 }  // namespace leomem

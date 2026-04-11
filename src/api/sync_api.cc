@@ -70,6 +70,14 @@ Status DrainControl(RuntimeContext& ctx) {
         Status ack_status = ctx.transport()->PostControlMessage(ack);
         if (ack_status != Status::kOk && ack_status != Status::kUnimplemented) return ack_status;
     }
+
+    std::vector<ControlMessage> retries;
+    Status retry_status = ctx.AdvanceControlAckTimeouts(&retries);
+    if (retry_status != Status::kOk) return retry_status;
+    for (const auto& retry : retries) {
+        Status post = ctx.transport()->PostControlMessage(retry);
+        if (post != Status::kOk && post != Status::kUnimplemented) return post;
+    }
     return Status::kOk;
 }
 

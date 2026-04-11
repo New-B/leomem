@@ -35,6 +35,8 @@ static void ApplyKV(const std::string& key, const std::string& value, Config* cf
     else if (key == "rdma_enable_control_path") cfg->rdma_enable_control_path = (value == "1" || value == "true");
     else if (key == "coherence_mode_override") cfg->coherence_mode_override = ParseCoherenceModeOverride(value);
     else if (key == "cache_admission_policy") cfg->cache_admission_policy = ParseAdmissionPolicy(value);
+    else if (key == "control_ack_timeout_polls") cfg->control_ack_timeout_polls = std::stoull(value);
+    else if (key == "control_ack_max_retries") cfg->control_ack_max_retries = std::stoull(value);
     else if (key == "rdma_device_name") cfg->rdma_device_name = value;
     else if (key == "rdma_port") cfg->rdma_port = static_cast<std::uint8_t>(std::stoul(value));
     else if (key == "rdma_gid_index") cfg->rdma_gid_index = static_cast<std::uint8_t>(std::stoul(value));

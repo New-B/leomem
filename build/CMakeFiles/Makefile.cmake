@@ -83,5 +83,9 @@ set(CMAKE_DEPEND_INFO_FILES
   "benchmarks/CMakeFiles/leomem_micro_rw_latency.dir/DependInfo.cmake"
   "benchmarks/CMakeFiles/leomem_micro_phase_shift.dir/DependInfo.cmake"
   "benchmarks/CMakeFiles/leomem_micro_runtime_phase_shift.dir/DependInfo.cmake"
+  "benchmarks/CMakeFiles/leomem_micro_adaptive_coherence_paper.dir/DependInfo.cmake"
   "benchmarks/CMakeFiles/leomem_workload_iterative_analytics.dir/DependInfo.cmake"
+  "benchmarks/CMakeFiles/leomem_workload_ycsb_mixed.dir/DependInfo.cmake"
+  "benchmarks/CMakeFiles/leomem_workload_kmeans.dir/DependInfo.cmake"
+  "benchmarks/CMakeFiles/leomem_workload_pagerank.dir/DependInfo.cmake"
   )

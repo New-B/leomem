@@ -1,0 +1,8 @@
+pagerank workload
+nodes=4 vertices=2048 out_degree=4 iterations=4 runtime_ms=358.613
+ops: reads=49152 writes=53248 remote_reads=49152 remote_writes=53248
+cache: hits=49152 misses=0 admissions=0 rejections=0
+coherence: switches=64 wi=0 si=0 adaptive=102400
+protocol: precise_inv=49152 range_inv=0 owner_biased=53248 handoffs=64
+batching: queued=53248 merged=0 flushed_writes=53248 batches=53248 bytes=425984
+csv: benchmark=pagerank,nodes=4,vertices=2048,out_degree=4,iterations=4,runtime_ms=358.613,reads=49152,writes=53248,cache_hits=49152,cache_misses=0,admissions=0,rejections=0,switches=64,wi=0,si=0,adaptive=102400,precise_inv=49152,range_inv=0,owner_biased=53248,handoffs=64,merged=0,batches=53248,bytes=425984

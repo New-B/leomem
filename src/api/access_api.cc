@@ -58,8 +58,12 @@ std::vector<std::shared_ptr<BlockMeta>> PrepareMetadata(RuntimeContext& ctx,
                 meta->version.fetch_add(1, std::memory_order_relaxed);
             }
         } else {
-            meta->state.store(BlockState::kShared, std::memory_order_relaxed);
-            meta->owner_node.store(addr.home_node, std::memory_order_relaxed);
+            if (meta->owner_node.load(std::memory_order_relaxed) == kInvalidNodeId) {
+                meta->owner_node.store(addr.home_node, std::memory_order_relaxed);
+            }
+            if (meta->state.load(std::memory_order_relaxed) == BlockState::kHome) {
+                meta->state.store(BlockState::kShared, std::memory_order_relaxed);
+            }
         }
         metas.push_back(std::move(meta));
     }
@@ -141,6 +145,19 @@ std::size_t BlockRangeSize(const RuntimeContext& ctx, const BlockRange& range) {
     return range.count * ctx.GetConfig().block_size;
 }
 
+Status DrivePendingControlAcks(RuntimeContext& ctx) {
+    std::vector<ControlMessage> retries;
+    Status s = ctx.AdvanceControlAckTimeouts(&retries);
+    if (s != Status::kOk) return s;
+    for (const auto& retry : retries) {
+        Status post = ctx.transport()->PostControlMessage(retry);
+        if (post != Status::kOk && post != Status::kUnimplemented) {
+            return post;
+        }
+    }
+    return Status::kOk;
+}
+
 Status ProcessPendingControlMessages(RuntimeContext& ctx) {
     std::vector<ControlMessage> messages;
     Status s = ctx.transport()->DrainControlMessages(64, &messages);
@@ -193,7 +210,7 @@ Status ProcessPendingControlMessages(RuntimeContext& ctx) {
             if (ack_status != Status::kOk && ack_status != Status::kUnimplemented) return ack_status;
         }
     }
-    return Status::kOk;
+    return DrivePendingControlAcks(ctx);
 }
 
 ControlMessage MakeControlMessage(RuntimeContext& ctx,
@@ -234,6 +251,23 @@ Version MaxObservedVersion(const std::vector<std::shared_ptr<BlockMeta>>& metas)
     return version;
 }
 
+bool AllMetasValidated(const std::vector<std::shared_ptr<BlockMeta>>& metas) {
+    for (const auto& meta : metas) {
+        if (meta->last_validated_version.load(std::memory_order_relaxed) <
+            meta->version.load(std::memory_order_relaxed)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void MarkReadValidated(const std::vector<std::shared_ptr<BlockMeta>>& metas) {
+    for (const auto& meta : metas) {
+        meta->last_validated_version.store(
+            meta->version.load(std::memory_order_relaxed), std::memory_order_relaxed);
+    }
+}
+
 Status TryOwnerAwareRead(RuntimeContext& ctx,
                          GlobalAddr addr,
                          void* buf,
@@ -245,21 +279,27 @@ Status TryOwnerAwareRead(RuntimeContext& ctx,
     }
 
     const NodeId owner = DominantOwnerNode(metas, addr.home_node);
+    const bool validated = AllMetasValidated(metas);
     if (owner == ctx.GetConfig().node_id) {
-        if (ctx.cache_manager()->TryReadCached(addr, buf, size)) {
+        if (validated && ctx.cache_manager()->TryReadCached(addr, buf, size)) {
             if (redirected_to_owner != nullptr) {
                 *redirected_to_owner = true;
             }
             return Status::kOk;
         }
-        return ctx.transport()->Read(addr, buf, size);
+        Status home_status = ctx.transport()->Read(addr, buf, size);
+        if (home_status == Status::kOk) {
+            MarkReadValidated(metas);
+        }
+        return home_status;
     }
 
-    if (owner != kInvalidNodeId && owner != addr.home_node) {
+    if (validated && owner != kInvalidNodeId && owner != addr.home_node) {
         GlobalAddr owner_addr = addr;
         owner_addr.home_node = owner;
         Status owner_status = ctx.transport()->Read(owner_addr, buf, size);
         if (owner_status == Status::kOk) {
+            MarkReadValidated(metas);
             if (redirected_to_owner != nullptr) {
                 *redirected_to_owner = true;
             }
@@ -267,7 +307,17 @@ Status TryOwnerAwareRead(RuntimeContext& ctx,
         }
     }
 
-    return ctx.transport()->Read(addr, buf, size);
+    Status home_status = ctx.transport()->Read(addr, buf, size);
+    if (home_status == Status::kOk) {
+        MarkReadValidated(metas);
+        for (const auto& meta : metas) {
+            if (meta->state.load(std::memory_order_relaxed) == BlockState::kInvalid) {
+                meta->state.store(BlockState::kShared, std::memory_order_relaxed);
+                meta->owner_node.store(addr.home_node, std::memory_order_relaxed);
+            }
+        }
+    }
+    return home_status;
 }
 
 void ApplyWriteMetadata(RuntimeContext& ctx,
@@ -424,14 +474,14 @@ Status lm_write(GlobalAddr addr, const void* buf, std::size_t size) {
                 ctx, addr, range, CoherenceMode::kWI, ControlOpcode::kInvalidateRange, max_version);
             Status ctrl = ctx.transport()->PostControlMessage(msg);
             if (ctrl != Status::kOk && ctrl != Status::kUnimplemented) return ctrl;
-            if (ctrl == Status::kOk) ctx.TrackPendingControlAck(msg.request_id);
+            if (ctrl == Status::kOk) ctx.TrackPendingControlAck(msg);
         }
         if (owner_handoff) {
             ControlMessage msg = MakeControlMessage(
                 ctx, addr, range, CoherenceMode::kAdaptive, ControlOpcode::kOwnerTransfer, max_version);
             Status ctrl = ctx.transport()->PostControlMessage(msg);
             if (ctrl != Status::kOk && ctrl != Status::kUnimplemented) return ctrl;
-            if (ctrl == Status::kOk) ctx.TrackPendingControlAck(msg.request_id);
+            if (ctrl == Status::kOk) ctx.TrackPendingControlAck(msg);
         }
 
         const std::size_t invalidated = range_invalidation

@@ -1,0 +1,8 @@
+iterative analytics benchmark
+nodes: local=0 targets=3 total=4
+ops: reads=81 writes=45 remote_reads=81 remote_writes=45
+cache: hits=18 misses=63 admissions=3 rejections=60
+coherence: switches=21 wi=54 si=3 adaptive=69
+protocol: precise_inv=0 range_inv=3 owner_biased=0 handoffs=0
+batching: queued=45 merged=0 flushed_writes=45 batches=45 bytes=360
+csv: benchmark=iterative_analytics,node=0,nodes=4,reads=81,writes=45,cache_hits=18,cache_misses=63,admissions=3,rejections=60,switches=21,wi=54,si=3,adaptive=69,precise_inv=0,range_inv=3,owner_biased=0,handoffs=0,merged=0,batches=45,bytes=360

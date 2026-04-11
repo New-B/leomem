@@ -1,0 +1,8 @@
+ycsb-like mixed workload
+workload=B nodes=4 total_ops=20000 record_count=4096 runtime_ms=42.224 throughput_mops=0.474
+ops: reads=19019 writes=5077 remote_reads=19019 remote_writes=5077
+cache: hits=0 misses=19019 admissions=0 rejections=19019
+coherence: switches=0 wi=24096 si=0 adaptive=0
+protocol: precise_inv=0 range_inv=0 owner_biased=0 handoffs=0
+batching: queued=0 merged=0 flushed_writes=0 batches=0 bytes=0
+csv: benchmark=ycsb_mixed,workload=B,nodes=4,total_ops=20000,record_count=4096,runtime_ms=42.224,throughput_mops=0.474,reads=19019,writes=5077,cache_hits=0,cache_misses=19019,admissions=0,rejections=19019,switches=0,wi=24096,si=0,adaptive=0,precise_inv=0,range_inv=0,owner_biased=0,handoffs=0,merged=0,batches=0,bytes=0

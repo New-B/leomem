@@ -177,6 +177,12 @@ int main() {
     owner_meta->owner_node.store(2, std::memory_order_relaxed);
     owner_meta->state.store(BlockState::kOwner, std::memory_order_relaxed);
     owner_meta->mode.store(CoherenceMode::kAdaptive, std::memory_order_relaxed);
+    owner_meta->version.store(2, std::memory_order_relaxed);
+    owner_meta->last_validated_version.store(0, std::memory_order_relaxed);
+
+    std::uint64_t home_payload = 500;
+    s = RuntimeContext::Instance().transport()->Write(owner_shadow_addr, &home_payload, sizeof(home_payload));
+    assert(s == Status::kOk);
 
     std::uint64_t owner_payload = 777;
     GlobalAddr owner_location = owner_shadow_addr;
@@ -185,6 +191,15 @@ int main() {
     assert(s == Status::kOk);
 
     std::uint64_t owner_read = 0;
+    s = lm_read(owner_shadow_addr, &owner_read, sizeof(owner_read));
+    assert(s == Status::kOk);
+    assert(owner_read == home_payload);
+    assert(owner_meta->last_validated_version.load(std::memory_order_relaxed) ==
+           owner_meta->version.load(std::memory_order_relaxed));
+
+    owner_payload = 501;
+    s = RuntimeContext::Instance().transport()->Write(owner_location, &owner_payload, sizeof(owner_payload));
+    assert(s == Status::kOk);
     s = lm_read(owner_shadow_addr, &owner_read, sizeof(owner_read));
     assert(s == Status::kOk);
     assert(owner_read == owner_payload);
@@ -203,10 +218,40 @@ int main() {
     assert(s == Status::kOk);
     assert(!RuntimeContext::Instance().HasPendingControlAck(kAckRequestId));
 
+    ControlMessage retry_msg;
+    retry_msg.opcode = ControlOpcode::kInvalidateRange;
+    retry_msg.source_node = RuntimeContext::Instance().GetConfig().node_id;
+    retry_msg.target_node = 1;
+    retry_msg.request_id = 88;
+    RuntimeContext::Instance().TrackPendingControlAck(retry_msg);
+    std::vector<ControlMessage> retries;
+    for (std::size_t i = 0; i < RuntimeContext::Instance().GetConfig().control_ack_timeout_polls; ++i) {
+        s = RuntimeContext::Instance().AdvanceControlAckTimeouts(&retries);
+        assert(s == Status::kOk);
+        assert(retries.empty());
+    }
+    s = RuntimeContext::Instance().AdvanceControlAckTimeouts(&retries);
+    assert(s == Status::kOk);
+    assert(retries.size() == 1);
+    assert(retries[0].request_id == retry_msg.request_id);
+    retries.clear();
+    for (std::size_t retry = 0; retry < RuntimeContext::Instance().GetConfig().control_ack_max_retries; ++retry) {
+        for (std::size_t i = 0; i <= RuntimeContext::Instance().GetConfig().control_ack_timeout_polls; ++i) {
+            s = RuntimeContext::Instance().AdvanceControlAckTimeouts(&retries);
+            if (retry + 1 == RuntimeContext::Instance().GetConfig().control_ack_max_retries &&
+                i == RuntimeContext::Instance().GetConfig().control_ack_timeout_polls) {
+                assert(s == Status::kTimedOut);
+                break;
+            }
+            assert(s == Status::kOk);
+            retries.clear();
+        }
+    }
+
     StatsSnapshot st = lm_get_stats();
     assert(st.alloc_ops == 2);
     assert(st.write_ops == 2);
-    assert(st.read_ops == 3);
+    assert(st.read_ops == 4);
 
     s = lm_shutdown();
     assert(s == Status::kOk);

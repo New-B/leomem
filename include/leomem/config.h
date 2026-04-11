@@ -19,6 +19,8 @@ struct Config {
     bool rdma_enable_control_path = true;
     std::int32_t coherence_mode_override = -1;
     std::int32_t cache_admission_policy = 0;
+    std::size_t control_ack_timeout_polls = 4;
+    std::size_t control_ack_max_retries = 2;
 
     std::string rdma_device_name;
     std::uint8_t rdma_port = 1;
