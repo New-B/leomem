@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <list>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
@@ -32,6 +33,12 @@ struct DrainedRemoteWriteBatch {
 
 class CacheManager {
 public:
+    struct CacheStats {
+        std::uint64_t evictions = 0;
+        std::uint64_t resident_entries = 0;
+        std::uint64_t resident_bytes = 0;
+    };
+
     explicit CacheManager(const Config& cfg) : cfg_(cfg) {}
 
     Status Init();
@@ -54,6 +61,7 @@ public:
     bool ShouldFlushDestination(NodeId node, std::size_t threshold) const;
     DrainedRemoteWriteBatch DrainRemoteWrites(NodeId node);
     std::vector<NodeId> PendingDestinations() const;
+    CacheStats GetCacheStats() const;
 
 private:
     struct CacheKey {
@@ -71,15 +79,21 @@ private:
 
     struct CachedValue {
         std::vector<std::uint8_t> payload;
+        std::list<CacheKey>::iterator lru_it;
     };
 
     CoherenceMode DecideCoherenceMode(const BlockMeta& meta) const;
+    void TouchLocked(const std::unordered_map<CacheKey, CachedValue, CacheKeyHash>::iterator& it);
+    void EvictIfNeededLocked(std::size_t incoming_bytes);
     static bool CanMergeWrites(const PendingRemoteWrite& current, const PendingRemoteWrite& incoming);
     static void MergeWrites(PendingRemoteWrite* current, const PendingRemoteWrite& incoming);
 
     Config cfg_;
     mutable std::mutex mu_;
     std::uint64_t access_epoch_ = 0;
+    std::uint64_t cached_bytes_ = 0;
+    std::uint64_t eviction_count_ = 0;
+    std::list<CacheKey> lru_;
     std::unordered_map<CacheKey, CachedValue, CacheKeyHash> cached_reads_;
     std::unordered_map<NodeId, std::vector<PendingRemoteWrite>> write_queues_;
 };

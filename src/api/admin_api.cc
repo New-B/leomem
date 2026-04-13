@@ -1,5 +1,6 @@
 #include "leomem/leomem.h"
 
+#include "memory/cache/cache_manager.h"
 #include "runtime/context.h"
 #include "runtime/init.h"
 #include "stats/counters.h"
@@ -17,7 +18,14 @@ Status lm_shutdown() {
 StatsSnapshot lm_get_stats() {
     auto& ctx = RuntimeContext::Instance();
     if (!ctx.IsInitialized()) return {};
-    return ctx.stats()->Snapshot();
+    StatsSnapshot snapshot = ctx.stats()->Snapshot();
+    if (ctx.cache_manager() != nullptr) {
+        const auto cache_stats = ctx.cache_manager()->GetCacheStats();
+        snapshot.cache_evictions = cache_stats.evictions;
+        snapshot.cache_resident_entries = cache_stats.resident_entries;
+        snapshot.cache_resident_bytes = cache_stats.resident_bytes;
+    }
+    return snapshot;
 }
 
 const char* StatusToString(Status s) {

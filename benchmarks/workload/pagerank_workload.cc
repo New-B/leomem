@@ -177,11 +177,14 @@ int RunPageRank(const Config& cfg, const PageRankSpec& spec) {
                 static_cast<unsigned long long>(st.write_ops),
                 static_cast<unsigned long long>(st.remote_reads),
                 static_cast<unsigned long long>(st.remote_writes));
-    std::printf("cache: hits=%llu misses=%llu admissions=%llu rejections=%llu\n",
+    std::printf("cache: hits=%llu misses=%llu admissions=%llu rejections=%llu evictions=%llu resident_entries=%llu resident_bytes=%llu\n",
                 static_cast<unsigned long long>(st.cache_hits),
                 static_cast<unsigned long long>(st.cache_misses),
                 static_cast<unsigned long long>(st.cache_admissions),
-                static_cast<unsigned long long>(st.cache_rejections));
+                static_cast<unsigned long long>(st.cache_rejections),
+                static_cast<unsigned long long>(st.cache_evictions),
+                static_cast<unsigned long long>(st.cache_resident_entries),
+                static_cast<unsigned long long>(st.cache_resident_bytes));
     std::printf("coherence: switches=%llu wi=%llu si=%llu adaptive=%llu\n",
                 static_cast<unsigned long long>(st.coherence_mode_switches),
                 static_cast<unsigned long long>(st.coherence_mode_wi),
@@ -198,7 +201,7 @@ int RunPageRank(const Config& cfg, const PageRankSpec& spec) {
                 static_cast<unsigned long long>(st.flushed_remote_writes),
                 static_cast<unsigned long long>(st.flushed_remote_batches),
                 static_cast<unsigned long long>(st.flushed_remote_write_bytes));
-    std::printf("csv: benchmark=pagerank,nodes=%u,vertices=%zu,out_degree=%zu,iterations=%zu,runtime_ms=%.3f,reads=%llu,writes=%llu,cache_hits=%llu,cache_misses=%llu,admissions=%llu,rejections=%llu,switches=%llu,wi=%llu,si=%llu,adaptive=%llu,precise_inv=%llu,range_inv=%llu,owner_biased=%llu,handoffs=%llu,merged=%llu,batches=%llu,bytes=%llu\n",
+    std::printf("csv: benchmark=pagerank,nodes=%u,vertices=%zu,out_degree=%zu,iterations=%zu,runtime_ms=%.3f,reads=%llu,writes=%llu,cache_hits=%llu,cache_misses=%llu,admissions=%llu,rejections=%llu,cache_evictions=%llu,cache_resident_entries=%llu,cache_resident_bytes=%llu,switches=%llu,wi=%llu,si=%llu,adaptive=%llu,precise_inv=%llu,range_inv=%llu,owner_biased=%llu,handoffs=%llu,merged=%llu,batches=%llu,bytes=%llu\n",
                 static_cast<unsigned>(run_cfg.nr_nodes),
                 spec.vertices,
                 spec.out_degree,
@@ -210,6 +213,9 @@ int RunPageRank(const Config& cfg, const PageRankSpec& spec) {
                 static_cast<unsigned long long>(st.cache_misses),
                 static_cast<unsigned long long>(st.cache_admissions),
                 static_cast<unsigned long long>(st.cache_rejections),
+                static_cast<unsigned long long>(st.cache_evictions),
+                static_cast<unsigned long long>(st.cache_resident_entries),
+                static_cast<unsigned long long>(st.cache_resident_bytes),
                 static_cast<unsigned long long>(st.coherence_mode_switches),
                 static_cast<unsigned long long>(st.coherence_mode_wi),
                 static_cast<unsigned long long>(st.coherence_mode_si),

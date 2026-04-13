@@ -47,6 +47,7 @@ static void ApplyKV(const std::string& key, const std::string& value, Config* cf
     else if (key == "rdma_bootstrap_timeout_ms") cfg->rdma_bootstrap_timeout_ms = std::stoull(value);
     else if (key == "rdma_exchange_dir") cfg->rdma_exchange_dir = value;
     else if (key == "profiling_window_size") cfg->profiling_window_size = std::stoull(value);
+    else if (key == "cache_capacity_bytes") cfg->cache_capacity_bytes = std::stoull(value);
     else if (key == "cache_admission_min_reads") cfg->cache_admission_min_reads = std::stoull(value);
     else if (key == "cache_admission_max_writes") cfg->cache_admission_max_writes = std::stoull(value);
     else if (key == "cache_admission_max_sharers") cfg->cache_admission_max_sharers = std::stoull(value);

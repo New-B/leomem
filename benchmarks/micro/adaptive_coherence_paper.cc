@@ -54,6 +54,9 @@ StatsSnapshot DiffStats(const StatsSnapshot& after, const StatsSnapshot& before)
     delta.cache_misses = after.cache_misses - before.cache_misses;
     delta.cache_admissions = after.cache_admissions - before.cache_admissions;
     delta.cache_rejections = after.cache_rejections - before.cache_rejections;
+    delta.cache_evictions = after.cache_evictions - before.cache_evictions;
+    delta.cache_resident_entries = after.cache_resident_entries;
+    delta.cache_resident_bytes = after.cache_resident_bytes;
     delta.queued_remote_writes = after.queued_remote_writes - before.queued_remote_writes;
     delta.flushed_remote_writes = after.flushed_remote_writes - before.flushed_remote_writes;
     delta.flushed_remote_write_bytes = after.flushed_remote_write_bytes - before.flushed_remote_write_bytes;
@@ -225,11 +228,14 @@ void PrintSummary(const RunSummary& summary) {
                 static_cast<unsigned long long>(st.write_ops),
                 static_cast<unsigned long long>(st.remote_reads),
                 static_cast<unsigned long long>(st.remote_writes));
-    std::printf("cache: hits=%llu misses=%llu admissions=%llu rejections=%llu\n",
+    std::printf("cache: hits=%llu misses=%llu admissions=%llu rejections=%llu evictions=%llu resident_entries=%llu resident_bytes=%llu\n",
                 static_cast<unsigned long long>(st.cache_hits),
                 static_cast<unsigned long long>(st.cache_misses),
                 static_cast<unsigned long long>(st.cache_admissions),
-                static_cast<unsigned long long>(st.cache_rejections));
+                static_cast<unsigned long long>(st.cache_rejections),
+                static_cast<unsigned long long>(st.cache_evictions),
+                static_cast<unsigned long long>(st.cache_resident_entries),
+                static_cast<unsigned long long>(st.cache_resident_bytes));
     std::printf("coherence: switches=%llu wi=%llu si=%llu adaptive=%llu\n",
                 static_cast<unsigned long long>(st.coherence_mode_switches),
                 static_cast<unsigned long long>(st.coherence_mode_wi),
@@ -240,7 +246,7 @@ void PrintSummary(const RunSummary& summary) {
                 static_cast<unsigned long long>(st.range_cache_invalidations),
                 static_cast<unsigned long long>(st.owner_biased_writes),
                 static_cast<unsigned long long>(st.owner_handoffs));
-    std::printf("csv: benchmark=adaptive_coherence_paper,mode=%s,readers=%d,epochs=%d,measured_epochs=%d,mean_epoch_us=%.2f,reads=%llu,writes=%llu,cache_hits=%llu,cache_misses=%llu,admissions=%llu,rejections=%llu,switches=%llu,wi=%llu,si=%llu,adaptive=%llu,precise_inv=%llu,range_inv=%llu,owner_biased=%llu,handoffs=%llu\n",
+    std::printf("csv: benchmark=adaptive_coherence_paper,mode=%s,readers=%d,epochs=%d,measured_epochs=%d,mean_epoch_us=%.2f,reads=%llu,writes=%llu,cache_hits=%llu,cache_misses=%llu,admissions=%llu,rejections=%llu,cache_evictions=%llu,cache_resident_entries=%llu,cache_resident_bytes=%llu,switches=%llu,wi=%llu,si=%llu,adaptive=%llu,precise_inv=%llu,range_inv=%llu,owner_biased=%llu,handoffs=%llu\n",
                 summary.mode.c_str(),
                 summary.readers,
                 kTotalEpochs,
@@ -252,6 +258,9 @@ void PrintSummary(const RunSummary& summary) {
                 static_cast<unsigned long long>(st.cache_misses),
                 static_cast<unsigned long long>(st.cache_admissions),
                 static_cast<unsigned long long>(st.cache_rejections),
+                static_cast<unsigned long long>(st.cache_evictions),
+                static_cast<unsigned long long>(st.cache_resident_entries),
+                static_cast<unsigned long long>(st.cache_resident_bytes),
                 static_cast<unsigned long long>(st.coherence_mode_switches),
                 static_cast<unsigned long long>(st.coherence_mode_wi),
                 static_cast<unsigned long long>(st.coherence_mode_si),

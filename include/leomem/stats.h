@@ -16,6 +16,9 @@ struct StatsSnapshot {
     std::uint64_t cache_misses = 0;
     std::uint64_t cache_admissions = 0;
     std::uint64_t cache_rejections = 0;
+    std::uint64_t cache_evictions = 0;
+    std::uint64_t cache_resident_entries = 0;
+    std::uint64_t cache_resident_bytes = 0;
     std::uint64_t queued_remote_writes = 0;
     std::uint64_t flushed_remote_writes = 0;
     std::uint64_t flushed_remote_write_bytes = 0;

@@ -95,11 +95,14 @@ int main(int argc, char** argv) {
                 static_cast<unsigned long long>(st.write_ops),
                 static_cast<unsigned long long>(st.remote_reads),
                 static_cast<unsigned long long>(st.remote_writes));
-    std::printf("cache: hits=%llu misses=%llu admissions=%llu rejections=%llu\n",
+    std::printf("cache: hits=%llu misses=%llu admissions=%llu rejections=%llu evictions=%llu resident_entries=%llu resident_bytes=%llu\n",
                 static_cast<unsigned long long>(st.cache_hits),
                 static_cast<unsigned long long>(st.cache_misses),
                 static_cast<unsigned long long>(st.cache_admissions),
-                static_cast<unsigned long long>(st.cache_rejections));
+                static_cast<unsigned long long>(st.cache_rejections),
+                static_cast<unsigned long long>(st.cache_evictions),
+                static_cast<unsigned long long>(st.cache_resident_entries),
+                static_cast<unsigned long long>(st.cache_resident_bytes));
     std::printf("coherence: switches=%llu wi=%llu si=%llu adaptive=%llu\n",
                 static_cast<unsigned long long>(st.coherence_mode_switches),
                 static_cast<unsigned long long>(st.coherence_mode_wi),

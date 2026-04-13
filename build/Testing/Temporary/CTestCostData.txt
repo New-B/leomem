@@ -1,2 +1,2 @@
-leomem_test_smoke 16 0.128781
+leomem_test_smoke 18 0.123363
 ---

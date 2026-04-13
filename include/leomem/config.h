@@ -33,6 +33,7 @@ struct Config {
     std::string rdma_exchange_dir;
 
     std::size_t profiling_window_size = 8;
+    std::size_t cache_capacity_bytes = 0;
     std::size_t cache_admission_min_reads = 2;
     std::size_t cache_admission_max_writes = 1;
     std::size_t cache_admission_max_sharers = 2;

@@ -62,6 +62,7 @@ int main() {
 
     Config cache_cfg;
     cache_cfg.profiling_window_size = 4;
+    cache_cfg.cache_capacity_bytes = sizeof(std::uint64_t) * 2;
     cache_cfg.cache_admission_min_reads = 2;
     cache_cfg.cache_admission_max_writes = 0;
     cache_cfg.cache_admission_max_sharers = 3;
@@ -128,6 +129,23 @@ int main() {
     assert(!cache_mgr.TryReadCached(overlap_neighbor, &cached_out, sizeof(cached_out)));
     assert(cache_mgr.TryReadCached(separate, &cached_out, sizeof(cached_out)));
     assert(cache_mgr.Invalidate(separate, sizeof(cached)) == 1);
+
+    GlobalAddr lru_a = remote_addr;
+    GlobalAddr lru_b = remote_addr;
+    GlobalAddr lru_c = remote_addr;
+    lru_b.offset += 256;
+    lru_c.offset += 512;
+    cache_mgr.InsertCached(lru_a, &cached, sizeof(cached));
+    cache_mgr.InsertCached(lru_b, &cached_next, sizeof(cached_next));
+    assert(cache_mgr.TryReadCached(lru_a, &cached_out, sizeof(cached_out)));
+    cache_mgr.InsertCached(lru_c, &cached, sizeof(cached));
+    const auto cache_stats = cache_mgr.GetCacheStats();
+    assert(cache_stats.evictions == 1);
+    assert(cache_stats.resident_entries == 2);
+    assert(cache_stats.resident_bytes == sizeof(cached) * 2);
+    assert(cache_mgr.TryReadCached(lru_a, &cached_out, sizeof(cached_out)));
+    assert(!cache_mgr.TryReadCached(lru_b, &cached_out, sizeof(cached_out)));
+    assert(cache_mgr.TryReadCached(lru_c, &cached_out, sizeof(cached_out)));
 
     cache_mgr.QueueRemoteWrite(remote_addr, &cached, sizeof(cached), CoherenceMode::kSI, false, false);
     assert(!cache_mgr.ShouldFlushDestination(remote_addr.home_node,
@@ -252,6 +270,8 @@ int main() {
     assert(st.alloc_ops == 2);
     assert(st.write_ops == 2);
     assert(st.read_ops == 4);
+    assert(st.cache_resident_entries >= 1);
+    assert(st.cache_resident_bytes >= sizeof(std::uint64_t));
 
     s = lm_shutdown();
     assert(s == Status::kOk);

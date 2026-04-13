@@ -682,13 +682,15 @@ src/CMakeFiles/leomem.dir/api/admin_api.cc.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__functional/unary_negate.h \
   /Users/wangbo/Documents/submission/vldb2026/leomem/include/leomem/stats.h \
   /Users/wangbo/Documents/submission/vldb2026/leomem/include/leomem/status.h \
-  /Users/wangbo/Documents/submission/vldb2026/leomem/src/runtime/context.h \
+  /Users/wangbo/Documents/submission/vldb2026/leomem/src/memory/cache/cache_manager.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/list \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/mutex \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__mutex_base \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/system_error \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__errc \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/cerrno \
-  /Users/wangbo/Documents/submission/vldb2026/leomem/src/transport/transport.h \
   /Users/wangbo/Documents/submission/vldb2026/leomem/include/leomem/block.h \
+  /Users/wangbo/Documents/submission/vldb2026/leomem/src/runtime/context.h \
+  /Users/wangbo/Documents/submission/vldb2026/leomem/src/transport/transport.h \
   /Users/wangbo/Documents/submission/vldb2026/leomem/src/runtime/init.h \
   /Users/wangbo/Documents/submission/vldb2026/leomem/src/stats/counters.h

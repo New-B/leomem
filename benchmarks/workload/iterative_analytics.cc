@@ -80,11 +80,14 @@ int RunWorkload(const leomem::Config& cfg) {
                 static_cast<unsigned long long>(st.write_ops),
                 static_cast<unsigned long long>(st.remote_reads),
                 static_cast<unsigned long long>(st.remote_writes));
-    std::printf("cache: hits=%llu misses=%llu admissions=%llu rejections=%llu\n",
+    std::printf("cache: hits=%llu misses=%llu admissions=%llu rejections=%llu evictions=%llu resident_entries=%llu resident_bytes=%llu\n",
                 static_cast<unsigned long long>(st.cache_hits),
                 static_cast<unsigned long long>(st.cache_misses),
                 static_cast<unsigned long long>(st.cache_admissions),
-                static_cast<unsigned long long>(st.cache_rejections));
+                static_cast<unsigned long long>(st.cache_rejections),
+                static_cast<unsigned long long>(st.cache_evictions),
+                static_cast<unsigned long long>(st.cache_resident_entries),
+                static_cast<unsigned long long>(st.cache_resident_bytes));
     std::printf("coherence: switches=%llu wi=%llu si=%llu adaptive=%llu\n",
                 static_cast<unsigned long long>(st.coherence_mode_switches),
                 static_cast<unsigned long long>(st.coherence_mode_wi),
@@ -101,7 +104,7 @@ int RunWorkload(const leomem::Config& cfg) {
                 static_cast<unsigned long long>(st.flushed_remote_writes),
                 static_cast<unsigned long long>(st.flushed_remote_batches),
                 static_cast<unsigned long long>(st.flushed_remote_write_bytes));
-    std::printf("csv: benchmark=iterative_analytics,node=%u,nodes=%u,reads=%llu,writes=%llu,cache_hits=%llu,cache_misses=%llu,admissions=%llu,rejections=%llu,switches=%llu,wi=%llu,si=%llu,adaptive=%llu,precise_inv=%llu,range_inv=%llu,owner_biased=%llu,handoffs=%llu,merged=%llu,batches=%llu,bytes=%llu\n",
+    std::printf("csv: benchmark=iterative_analytics,node=%u,nodes=%u,reads=%llu,writes=%llu,cache_hits=%llu,cache_misses=%llu,admissions=%llu,rejections=%llu,cache_evictions=%llu,cache_resident_entries=%llu,cache_resident_bytes=%llu,switches=%llu,wi=%llu,si=%llu,adaptive=%llu,precise_inv=%llu,range_inv=%llu,owner_biased=%llu,handoffs=%llu,merged=%llu,batches=%llu,bytes=%llu\n",
                 static_cast<unsigned>(cfg.node_id),
                 static_cast<unsigned>(cfg.nr_nodes),
                 static_cast<unsigned long long>(st.read_ops),
@@ -110,6 +113,9 @@ int RunWorkload(const leomem::Config& cfg) {
                 static_cast<unsigned long long>(st.cache_misses),
                 static_cast<unsigned long long>(st.cache_admissions),
                 static_cast<unsigned long long>(st.cache_rejections),
+                static_cast<unsigned long long>(st.cache_evictions),
+                static_cast<unsigned long long>(st.cache_resident_entries),
+                static_cast<unsigned long long>(st.cache_resident_bytes),
                 static_cast<unsigned long long>(st.coherence_mode_switches),
                 static_cast<unsigned long long>(st.coherence_mode_wi),
                 static_cast<unsigned long long>(st.coherence_mode_si),

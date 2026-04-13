@@ -30,6 +30,9 @@ bool RangesOverlap(const GlobalAddr& lhs_addr, std::size_t lhs_size,
 Status CacheManager::Init() {
     std::lock_guard<std::mutex> lk(mu_);
     access_epoch_ = 0;
+    cached_bytes_ = 0;
+    eviction_count_ = 0;
+    lru_.clear();
     cached_reads_.clear();
     write_queues_.clear();
     return Status::kOk;
@@ -37,6 +40,9 @@ Status CacheManager::Init() {
 
 Status CacheManager::Shutdown() {
     std::lock_guard<std::mutex> lk(mu_);
+    cached_bytes_ = 0;
+    eviction_count_ = 0;
+    lru_.clear();
     cached_reads_.clear();
     write_queues_.clear();
     return Status::kOk;
@@ -131,10 +137,13 @@ bool CacheManager::TryReadCached(GlobalAddr addr, void* buf, std::size_t size) {
     auto it = cached_reads_.find(key);
     if (it != cached_reads_.end()) {
         std::memcpy(buf, it->second.payload.data(), size);
+        TouchLocked(it);
         return true;
     }
 
-    for (const auto& [cached_key, cached_value] : cached_reads_) {
+    for (auto it2 = cached_reads_.begin(); it2 != cached_reads_.end(); ++it2) {
+        const auto& cached_key = it2->first;
+        const auto& cached_value = it2->second;
         if (cached_key.addr.home_node != addr.home_node) continue;
         if (cached_key.addr.region_id != addr.region_id) continue;
         if (cached_key.addr.offset > addr.offset) continue;
@@ -144,6 +153,7 @@ bool CacheManager::TryReadCached(GlobalAddr addr, void* buf, std::size_t size) {
 
         const std::size_t begin = static_cast<std::size_t>(addr.offset - cached_key.addr.offset);
         std::memcpy(buf, cached_value.payload.data() + begin, size);
+        TouchLocked(it2);
         return true;
     }
 
@@ -154,15 +164,40 @@ void CacheManager::InsertCached(GlobalAddr addr, const void* buf, std::size_t si
     if (buf == nullptr || size == 0 || !cfg_.enable_cache) return;
 
     std::lock_guard<std::mutex> lk(mu_);
+    if (cfg_.cache_capacity_bytes != 0 && size > cfg_.cache_capacity_bytes) return;
+
     CacheKey key{addr, size};
-    auto& value = cached_reads_[key];
+    auto it = cached_reads_.find(key);
+    if (it != cached_reads_.end()) {
+        if (it->second.payload.size() != size) {
+            cached_bytes_ -= it->second.payload.size();
+            cached_bytes_ += size;
+            it->second.payload.resize(size);
+        }
+        std::memcpy(it->second.payload.data(), buf, size);
+        TouchLocked(it);
+        EvictIfNeededLocked(0);
+        return;
+    }
+
+    EvictIfNeededLocked(size);
+    lru_.push_front(key);
+    CachedValue value;
     value.payload.resize(size);
+    value.lru_it = lru_.begin();
     std::memcpy(value.payload.data(), buf, size);
+    cached_bytes_ += size;
+    cached_reads_.emplace(key, std::move(value));
 }
 
 std::size_t CacheManager::Invalidate(GlobalAddr addr, std::size_t size) {
     std::lock_guard<std::mutex> lk(mu_);
-    return cached_reads_.erase(CacheKey{addr, size});
+    auto it = cached_reads_.find(CacheKey{addr, size});
+    if (it == cached_reads_.end()) return 0;
+    cached_bytes_ -= it->second.payload.size();
+    lru_.erase(it->second.lru_it);
+    cached_reads_.erase(it);
+    return 1;
 }
 
 std::size_t CacheManager::InvalidateRange(GlobalAddr addr, std::size_t size) {
@@ -170,6 +205,8 @@ std::size_t CacheManager::InvalidateRange(GlobalAddr addr, std::size_t size) {
     std::size_t removed = 0;
     for (auto it = cached_reads_.begin(); it != cached_reads_.end();) {
         if (RangesOverlap(it->first.addr, it->first.size, addr, size)) {
+            cached_bytes_ -= it->second.payload.size();
+            lru_.erase(it->second.lru_it);
             it = cached_reads_.erase(it);
             ++removed;
         } else {
@@ -256,6 +293,15 @@ std::vector<NodeId> CacheManager::PendingDestinations() const {
     return nodes;
 }
 
+CacheManager::CacheStats CacheManager::GetCacheStats() const {
+    std::lock_guard<std::mutex> lk(mu_);
+    CacheStats stats;
+    stats.evictions = eviction_count_;
+    stats.resident_entries = cached_reads_.size();
+    stats.resident_bytes = cached_bytes_;
+    return stats;
+}
+
 std::size_t CacheManager::CacheKeyHash::operator()(const CacheKey& key) const noexcept {
     std::size_t seed = static_cast<std::size_t>(key.addr.home_node);
     seed ^= static_cast<std::size_t>(key.addr.region_id) << 8;
@@ -292,6 +338,27 @@ CoherenceMode CacheManager::DecideCoherenceMode(const BlockMeta& meta) const {
     }
 
     return CoherenceMode::kSI;
+}
+
+void CacheManager::TouchLocked(const std::unordered_map<CacheKey, CachedValue, CacheKeyHash>::iterator& it) {
+    lru_.splice(lru_.begin(), lru_, it->second.lru_it);
+    it->second.lru_it = lru_.begin();
+}
+
+void CacheManager::EvictIfNeededLocked(std::size_t incoming_bytes) {
+    if (cfg_.cache_capacity_bytes == 0) return;
+    while (!lru_.empty() && cached_bytes_ + incoming_bytes > cfg_.cache_capacity_bytes) {
+        const CacheKey victim = lru_.back();
+        auto it = cached_reads_.find(victim);
+        if (it == cached_reads_.end()) {
+            lru_.pop_back();
+            continue;
+        }
+        cached_bytes_ -= it->second.payload.size();
+        lru_.pop_back();
+        cached_reads_.erase(it);
+        ++eviction_count_;
+    }
 }
 
 bool CacheManager::CanMergeWrites(const PendingRemoteWrite& current, const PendingRemoteWrite& incoming) {
